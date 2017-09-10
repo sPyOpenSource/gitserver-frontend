@@ -3,7 +3,12 @@
     var AppRouter = Backbone.Router.extend({
         routes: {
             '': 'home',
-            'sprint/:id': 'sprint' 
+            'item/:id': 'item',
+            'edit/:id': 'edit',
+            'settings': 'settings',
+            'items': 'items',
+            'help': 'help',
+            'about': 'about'
         },
         initialize: function (options) {
             this.contentElement = '#content';
@@ -17,16 +22,38 @@
             var view = new app.views.HomepageView({el: this.contentElement});
             this.render(view);
         },
-        sprint: function (id) {
-            var view = new app.views.SprintView({
+        items: function () {
+            var view = new app.views.MysiteView({el: this.contentElement});
+            this.render(view);
+        },
+        item: function (id) {
+            var view = new app.views.ItemView({
                 el: this.contentElement,
-                sprintId: id
+                itemId: id
             });
             this.render(view);
         },
+        edit: function (id) {
+            var view = new app.views.EditView({
+                el: this.contentElement,
+                itemId: id
+            });
+            this.render(view);
+        },
+        settings: function(){
+          var view = new app.views.SettingsView({el: this.contentElement});
+          this.render(view);
+        },
+        help: function(){
+          var view = new app.views.HelpView({el: this.contentElement});
+          this.render(view);
+        },
+        about: function(){
+          var view = new app.views.AboutView({el: this.contentElement});
+          this.render(view);
+        },
         route: function (route, name, callback) {
             // Override default route to enforce login on every page
-            var login;
             callback = callback || this[name];
             callback = _.wrap(callback, function (original) {
                 var args = _.without(arguments, original);
@@ -34,17 +61,10 @@
                     original.apply(this, args);
                 } else {
                     // Show the login screen before calling the view
-                    $(this.contentElement).hide();
+                    //$(this.header.el).hide();
                     // Bind original callback once the login is successful
-                    login = new app.views.LoginView();
-                    $(this.contentElement).after(login.el);
-                    login.on('done', function () {
-                        this.header.render();
-                        $(this.contentElement).show();
-                        original.apply(this, args);
-                    }, this);
-                    // Render the login form
-                    login.render();
+                    var view = new app.views.LoginView({el: this.contentElement});
+                    this.render(view);
                 }
             });
             return Backbone.Router.prototype.route.apply(this, [route, name, callback]);
@@ -59,7 +79,7 @@
             this.current.render();
         }
     });
-    
+
     app.router = AppRouter;
 
 })(jQuery, Backbone, _, app);
