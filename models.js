@@ -51,18 +51,104 @@
         idAttributemodel: 'username'
     });
 
+    app.models.i18n = BaseModel.extend({
+        defaults: {
+          nl: {
+            'a marketplace for refugees and neighbours': 'een marketplaats voor vluchetellingen en buurbewoners',
+            'Refugive.com is a website created and used by the people from the neighbourhood.': 'Refugive.com is een website die gemaakt en gebruikt door de buurbewoners.',
+            'This site is created to match the wishes of refugees to the openheartness from the locals.': 'Deze website is gemaakt om de wensen van de vluchetellingen te passen bij de openhartigheid van de buurbewoners.',
+            'You may found clothes, books, games etc.': 'Jij kan kleren, boeken, speltjes etc vinden.',
+            'For examples: how about cooking a meal or doing sports together?': 'Bijvoorbeelden: hoe is het om een maaltijd te komen of samen sport gaan doen?',
+            'Do you need something (as a refugee) or you have clothes spare (as a local)?': 'Heb je iets nodig (als een vluchetelling) of heb je kleren te veel (als een buurbewoner)?',
+            'Take a look on Refugive.com and meet your new neighbours from there!': 'Nemen een kijk op Refugive.com en ontmoeten jouw nieuwe buren!',
+            'If you are a refugee, then it is for you free to advertise your needs and wishes on it.': 'Als je een vluchetelling ben, dan is het voor jou gratis om een advertentie te plaatsen voor wat je nodig hebt en wat je wenst.',
+            'It is also free for the locals, but offers should be made within a walking distance from the refugee center.': 'Het is ook gratis voor buurbewoners, maar de aanbod moet binnen de loop afstand vanaf de asielzoek center zijn.',
+            'No money should be traded for exhange the goods.': 'Er mag geen geld worden gehandeld voor goederen.',
+            'Refugive.com was started by a group of people in Bezuidenhout (The Hague) in order to help refugees from their neighbourhood.': 'Refugive.com is gestart bij een groep mensen uit Bezuidenhout (Den Haag) om de vluchetellingen te helpen in zijn buurt.',
+            'Refugive.com is a non-profit website.': 'Refugive.com is een non-profit website.',
+            'Best regards,': 'Met vriendelijke groeten,',
+            'and': 'en',
+            'Add An Item': 'Een Advertentie Toevoegen',
+            'Category': 'Categorie',
+            'Books': 'Boeken',
+            'Others': 'Anders',
+            'Toys': 'Speelgoeds',
+            'Activities': 'Activiteits',
+            'Clothes': 'Kleren',
+            'Password': 'Wachtwoord',
+            'Submit': 'Verzenden',
+            'I lost my password': 'Wachtwoord vergeten',
+            'Home': 'Hoofdpagina',
+            'Settings': 'Instellingen',
+            'Help': 'Hulp',
+            'Logout': 'Uitloggen',
+            'Login': 'Inloggen',
+            'Register': 'Registeren',
+            'Q & A': 'Vraag en Antwoord',
+            'Username': 'Gebruiksnaam',
+            'Group': 'Groep',
+            'Save': 'Opslagen',
+            'What is Refugive.com and how does it work?': 'Wat is Refugive.com en hoe werkt het?',
+            'About us': 'Over ons',
+            'Tips, suggestions, complaints or questions?': 'Tips, suggesties, klachten of vragen?',
+            'Please': 'Alstublieft',
+            'give us feedback': 'geef ons uw feedback',
+            'Title': 'Titel',
+            'Description': 'Beschrijving',
+            'Picture': 'Foto',
+            'Cancel': 'Annuleren',
+            'Create': 'Toevoegen',
+            'Offered by': 'Aangeboden door',
+            'since': 'sinds',
+            'Reply': 'Reageren',
+            'Message': 'Bericht',
+            'Local resident': 'Buurbewoner',
+            'AZC resident': 'AZC bewoner',
+            'How can I add an item?': 'Hoe kan ik een advertentie toevoegen?',
+            'You can add an item by clicking on Add An Item button.': 'Jij moet op Een Advertentie Toevoegen knop drukken.',
+            'How can I change my personal information?': 'Hoe kan ik mijn personelijk gegevens aanpassen?',
+            'You can change your information by click on Settings tab.': 'Jij kan jouw gegevens aanpassen in de Instellingen tab.',
+            'How can I react on an item?': 'Hoe kan ik op een advertentie reageren?',
+            'You can react on an item by clicking on Reply button after clicking on the item.': 'Jij kan op een advertentie reageren door op de Reageren knop te drukken na dat je die advertentie hebt gekozen.'
+          }
+        },
+        getLanguage: function () {
+            return 'nl';
+            var lang;
+            if (navigator.language) {
+                lang = navigator.language;
+            } else if (navigator.userLanguage) {
+                lang = navigator.userLanguage;
+            }
+            if (lang && lang.length > 2) {
+               lang = lang.substring(0, 2);
+            }
+            return lang;
+        },
+        T: function (text) {
+          var translation = this.get(this.getLanguage());
+          if (translation && text in translation){
+            return translation[text];
+          } else {
+            return text;
+          }
+        }
+    });
+
     var Session = Backbone.Model.extend({
         defaults: {
             token: null,
             user: null,
             own_items: null,
             others_items: null,
-            item: null
+            item: null,
+            i18n: null
         },
         initialize: function (options) {
             this.options = options;
             $.ajaxPrefilter($.proxy(this._setupAuth, this));
             this.load();
+            this.set('i18n', new app.models.i18n());
         },
         load: function () {
             var token = localStorage.apiToken;

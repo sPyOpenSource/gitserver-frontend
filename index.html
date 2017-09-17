@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Refugive</title>
+        <title>Refugive.com</title>
         <meta name="description" content="A refugee may need something. A local might have a spare item. Use this website to get in touch.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -12,7 +12,7 @@
         <script type="text/html" id="about-template">
           <div class="intro">
             <div class="wrap">
-              <h1>Refugive.com: a marketplace for refugees and neighbours</h1>
+              <h1>Refugive.com: <%=i18n.T('a marketplace for refugees and neighbours')%></h1>
             </div>
           </div>
           <hr>
@@ -20,20 +20,32 @@
             <div class="wrap">
               <section>
                 <p>
-                A new website for and by the neighbourhood: Refugive.com, a free marketplace for both refugees and neighbours. Our site wants to match the wishes of refugees to what neighbours are willing to share. Clothes for children and adults of course, but also books, games and social contacts. How about cooking a meal together, or doing sports?</p>
+                  <%=i18n.T('Refugive.com is a website created and used by the people from the neighbourhood.')%>
+                  <%=i18n.T('This site is created to match the wishes of refugees to the openheartness from the locals.')%>
+                  <%=i18n.T('You may found clothes, books, games etc.')%>
+                  <%=i18n.T('For examples: how about cooking a meal or doing sports together?')%>
+                </p>
                 <p>
-                Are you in need of something - or: do you have clothes, things or time to spare? Have a look around on Refugive.com and meet your new neighbours! If you are a refugee, it is free to advertise your needs and wishes - but you can only reply to two offers made by locals at a time. Of course ads are free for locals as well, but offers should only be made within walking distance of the refugee center. And no money should trade hands.</p>
+                  <%=i18n.T('Do you need something (as a refugee) or you have clothes spare (as a local)?')%>
+                  <%=i18n.T('Take a look on Refugive.com and meet your new neighbours from there!')%>
+                  <%=i18n.T('If you are a refugee, then it is for you free to advertise your needs and wishes on it.')%>
+                  <%=i18n.T('It is also free for the locals, but offers should be made within a walking distance from the refugee center.')%>
+                  <%=i18n.T('No money should be traded for exhange the goods.')%>
+                </p>
                 <p>
-                Refugive was started by a group of people in Bezuidenhout, The Hague wanting to help refugees in their neighbourhood. Refugive.com is a non profit website.</p>
+                  <%=i18n.T('Refugive.com was started by a group of people in Bezuidenhout (The Hague) in order to help refugees from their neighbourhood.')%>
+                  <%=i18n.T('Refugive.com is a non-profit website.')%>
+                </p>
                 <p>
-                Best regards,<br>Jasper, Jeroen, Krista, Maaike and Tijs</p>
+                  <%=i18n.T('Best regards,')%><br>Jasper, Jeroen, Krista, Maaike <%=i18n.T('and')%> Tijs
+                </p>
               </section>
             </div>
           </div>
         </script>
 
-        <script type="text/html" id="mysite-template">
-            <button class="add btn btn-default">Add An Item</button>
+        <script type="text/html" id="home-template">
+            <button class="add btn btn-default"><%=i18n.T('Add An Item')%></button>
             <% if (items !== null) { %>
               <div class="items">
                    <% _.each(items.models, function (item) { %>
@@ -50,10 +62,10 @@
                            <% } %>
                            <div class="factoids">
                              <div>
-                               Category
+                               <%=i18n.T('Category')%>
                                <% _.each(categories.models, function (category) { %>
                                  <% if ('http://localhost:8000/api/categories/'+category.get('id') === item.get('category')) { %>
-                                    <strong><%=category.get('name')%></strong>
+                                    <strong><%=i18n.T(category.get('name'))%></strong>
                                  <% } %>
                                <% }); %>
                              </div>
@@ -62,110 +74,118 @@
                      </div>
                    <% }); %>
                </div>
-            <% } else { %>
-              <h3 class="loading">Loading...</h3>
             <% } %>
         </script>
 
         <script type="text/html" id="login-template">
             <form action="" method="post">
-                <label for="id_email">E-mail:</label>
+                <label for="id_email"><%=i18n.T('E-mail')%>:</label>
                 <input id="id_email" type="text" name="email" pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" required />
-                <label for="id_password">Password:</label>
+                <label for="id_password"><%=i18n.T('Password')%>:</label>
                 <input id="id_password" type="password" name="password" required />
                 <br>
-                <button type="submit" class="btn btn-dafault">Submit</button>
-                <a href="/nl/resetpassword/" class="reset">I lost my password</a>
+                <button type="submit" class="btn btn-dafault"><%=i18n.T('Submit')%></button>
+                <a href="/nl/resetpassword/" class="reset"><%=i18n.T('I lost my password')%></a>
             </form>
         </script>
 
         <script type="text/html" id="header-template">
               <% if (authenticated) { %>
                 <ul class="nav nav-tabs">
-                  <li role="presentation"><a href="#">Home</a>
-                  <li role="presentation"><a href="#/settings">Settings</a>
-                  <li role="presentation"><a href="#/help">Help</a>
-                  <li role="presentation"><a href="#" class="logout">Logout</a>
+                  <li role="presentation"><a href="#"><%=i18n.T('Home')%></a>
+                  <li role="presentation"><a href="#/settings"><%=i18n.T('Settings')%></a>
+                  <li role="presentation"><a href="#/help"><%=i18n.T('Help')%></a>
+                  <li role="presentation"><a href="#" class="logout"><%=i18n.T('Logout')%></a>
                 </ul>
               <% } else { %>
                 <ul class="nav nav-tabs">
-                  <li role="presentation"><a href="/">Home</a>
-                  <li role="presentation"><a href="#">Login</a>
-                  <li role="presentation"><a href="/adduser">Register</a>
+                  <li role="presentation"><a href="/"><%=i18n.T('Home')%></a>
+                  <li role="presentation"><a href="#/help"><%=i18n.T('Help')%></a>
+                  <li role="presentation"><a href="#"><%=i18n.T('Login')%></a>
+                  <li role="presentation"><a href="/adduser"><%=i18n.T('Register')%></a>
                 </ul>
               <% } %>
         </script>
 
+        <script type="text/html" id="footer-template">
+          <div class="wrap">
+           <div class="opm">
+             <p><%=i18n.T('What is Refugive.com and how does it work?')%> <a href="#/about"><%=i18n.T('About us')%></a></p>
+             <div>
+             	<%=i18n.T('Tips, suggestions, complaints or questions?')%> <%=i18n.T('Please')%> <a href="https://docs.google.com/forms/d/1i1wh3T_YJY1ts8wx7yeRCALiPjtDDbrabWn5tuvx1Xg/viewform"><%=i18n.T('give us feedback')%></a>
+             </div>
+           </div>
+         </div>
+        </script>
+
         <script type="text/html" id="help-template">
-                <h1>Q & A </h1>
+                <h1><%=i18n.T('Q & A')%></h1>
                 <hr>
-                <strong><p>How can I add an item?</p></strong>
-                <p>You can add an item by your page by clicking on add an item.</p>
-                <strong><p>How can I change the content of an item?</p></strong>
-                <p>You can change the content of an item by your page by clicking on the item.</p>
-                <strong><p>How can I change my personal information?</p></strong>
-                <p>You can change your information by click on settings.</p>
-                <strong><p>How can I react on an item?</p></strong>
-                <p>You can react on an item by clicking them.</p>
+                <strong><p><%=i18n.T('How can I add an item?')%></p></strong>
+                <p><%=i18n.T('You can add an item by clicking on Add An Item button.')%></p>
+                <strong><p><%=i18n.T('How can I change my personal information?')%></p></strong>
+                <p><%=i18n.T('You can change your information by click on Settings tab.')%></p>
+                <strong><p><%=i18n.T('How can I react on an item?')%></p></strong>
+                <p><%=i18n.T('You can react on an item by clicking on Reply button after clicking on the item.')%></p>
         </script>
 
         <script type="text/html" id="settings-template">
             <form action="/nl/adduser" method="post">
-              <label for="id_email">E-mail:</label>
+              <label for="id_email"><%=i18n.T('E-mail')%>:</label>
               <input id="id_email" type="text" name="email" value="<%=_.escape(user.get('email'))%>" required />
-              <label for="id_username">Username:</label>
+              <label for="id_username"><%=i18n.T('Username')%>:</label>
               <input id="id_username" type="text" name="username" value="<%=_.escape(user.get('username'))%>" required/>
               <% if (groups !== null) { %>
-                <label for="id_group">Group: </label>
+                <label for="id_group"><%=i18n.T('Group')%>: </label>
                 <select id='id_group' name='group'>
                   <% _.each(groups.models, function(group){ %>
                     <% if(group.get('url') === user.get('group')){ %>
-                      <option value="<%=_.escape(group.get('url'))%>" selected="true"><%=_.escape(group.get('name'))%></option>
+                      <option value="<%=_.escape(group.get('url'))%>" selected="true"><%=i18n.T(group.get('name'))%></option>
                     <% } else { %>
-                      <option value="<%=_.escape(group.get('url'))%>"><%=_.escape(group.get('name'))%></option>
+                      <option value="<%=_.escape(group.get('url'))%>"><%=i18n.T(group.get('name'))%></option>
                     <% } %>
                   <% }); %>
                 </select>
               <% } %>
               <br>
-              <button type="submit" class="btn btn-dafault">Save</button>
+              <button type="submit" class="btn btn-dafault"><%=i18n.T('Save')%></button>
             </form>
         </script>
 
         <script type="text/html" id="new-item-template">
           <form action="/nl/image" method="post" enctype="multipart/form-data">
-            <label for="id_title">Title:</label>
+            <label for="id_title"><%=i18n.T('Title')%>:</label>
             <input name="csrfmiddlewaretoken" value="<%=csrf_token.get('csrf_token')%>" type="hidden">
             <input id="id_title" type="text" name="title" maxlength="100" required />
-            <label for="id_description">Description:</label>
+            <label for="id_description"><%=i18n.T('Description')%>:</label>
             <textarea id="id_description" name="description" cols="50"></textarea>
-            <label for="id_image">Picture:</label>
+            <label for="id_image"><%=i18n.T('Picture')%>:</label>
             <input type="file" name="photo">
             <input type="hidden" id="id_owner" name="owner" value="<%=owner.get('id')%>">
             <% if (categories !== null) { %>
-              <label for="id_description">Category: </label>
+              <label for="id_description"><%=i18n.T('Category')%>: </label>
               <select id='id_category' name='category' required>
                 <option value=""></option>
                 <% _.each(categories.models, function(category){ %>
-                  <option value="<%=category.get('id')%>"><%=_.escape(category.get('name'))%></option>
+                  <option value="<%=category.get('id')%>"><%=i18n.T(category.get('name'))%></option>
                 <% }); %>
               </select>
             <% } %>
             <br>
-            <button class="cancel btn btn-default">Cancel</button>
-            <button type="submit" class="btn btn-default">Create</button>
+            <button class="cancel btn btn-default"><%=i18n.T('Cancel')%></button>
+            <button type="submit" class="btn btn-default"><%=i18n.T('Create')%></button>
           </form>
         </script>
 
         <script type="text/html" id="new-message-template">
           <form action="" method="post">
-            <label for="id_text">Message:</label>
+            <label for="id_text"><%=i18n.T('Message')%>:</label>
             <textarea id="id_text" name="text" cols="50"></textarea>
             <input type="hidden" name="owner" value="<%=user.get('url')%>">
             <input type="hidden" name="item" value="http://localhost:8000/api/items/<%=item.get('id')%>">
             <br>
-            <button class="cancel btn btn-dafault">Cancel</button>
-            <button type="submit" class="btn btn-dafault">Create</button>
+            <button class="cancel btn btn-dafault"><%=i18n.T('Cancel')%></button>
+            <button type="submit" class="btn btn-dafault"><%=i18n.T('Create')%></button>
           </form>
         </script>
 
@@ -175,25 +195,30 @@
               <input type="hidden" name="id" value="<%=item.get('id')%>">
               <h1 dir="ltr"><%=item.get('title')%></h1>
               <div class="imgfactwrap">
+                <% if (item.get('image') !== '') { %>
+                  <div>
+                    <img src="https://res.cloudinary.com/dvrrqjzay/image/upload/c_fill,h_300,w_400/<%=item.get('image')%>.jpg">
+                  </div>
+                <% } %>
                 <div class="facts">
                   <p class="desc" dir="ltr">
                     <%=item.get('description')%>
                   </p>
                   <% if (users !== null) { %>
-                    <p class="postedby">Offered by
+                    <p class="postedby"><%=i18n.T('Offered by')%>
                       <% _.each(users.models, function(user){ %>
                         <% if (user.get('url') === item.get('owner')) { %>
                           <strong><%=_.escape(user.get('username'))%></strong>
                         <% }; %>
                       <% }); %>
-                      since <%=item.get('date')%>
+                      <%=i18n.T('since')%> <%=item.get('date')%>
                     </p>
                   <% } %>
                   <% _.each(messages.models, function (message) { %>
                       <%=message.get('full_text')%>
                       <br>
                   <% }); %>
-                  <button class="add btn btn-dafault">Reply</button>
+                  <button class="add btn btn-dafault"><%=i18n.T('Reply')%></button>
                 </div>
               </div>
             </section>
@@ -246,15 +271,5 @@
         <script src="views.js"></script>
         <script src="router.js"></script>
         <hr>
-        <footer>
-         <div class="wrap">
-          <div class="opm">
-            <p>What is Refugive and how does it work? <a href="#/about">About us</a></p>
-            <div>
-            	Tips, suggestions, complaints or questions? Please <a href="https://docs.google.com/forms/d/1i1wh3T_YJY1ts8wx7yeRCALiPjtDDbrabWn5tuvx1Xg/viewform">give us feedback</a>
-            </div>
-          </div>
-        </div>
-      </footer>
     </body>
 </html>

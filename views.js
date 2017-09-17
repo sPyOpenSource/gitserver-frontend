@@ -83,7 +83,9 @@
         },
         getContext: function () {
             return {
-              user: app.session.get('user'), item: app.session.get('item')
+              user: app.session.get('user'),
+              item: app.session.get('item'),
+              i18n: app.session.get('i18n')
             };
         },
         success: function (model) {
@@ -128,7 +130,8 @@
             return {
               owner: app.session.get('user'),
               categories: app.categories || null,
-              csrf_token: this.csrf_token
+              csrf_token: this.csrf_token,
+              i18n: app.session.get('i18n')
             };
         },
         done: function (event) {
@@ -164,7 +167,7 @@
             app.session.get('user').save();
         },
         getContext: function () {
-            return {groups: app.groups || null, user: app.session.get('user')};
+            return {groups: app.groups || null, user: app.session.get('user'), i18n: app.session.get('i18n')};
         },
         success: function (model) {
             this.done();
@@ -184,12 +187,12 @@
           });
         },
         getContext: function () {
-            return {groups: app.groups || null, user: app.session.get('user')};
+            return {groups: app.groups || null, user: app.session.get('user'), i18n: app.session.get('i18n')};
         }
     });
 
     var HomepageView = TemplateView.extend({
-        templateName: '#mysite-template',
+        templateName: '#home-template',
         events: {
             'click button.add': 'renderAddForm'
         },
@@ -225,7 +228,8 @@
               items: app.items.sort() || null,
               users: app.users || null,
               categories: app.categories || null,
-              owner: app.session.get('user')
+              owner: app.session.get('user'),
+              i18n: app.session.get('i18n')
             };
         },
         renderAddForm: function (event) {
@@ -242,7 +246,7 @@
     });
 
     var MysiteView = TemplateView.extend({
-        templateName: '#mysite-template',
+        templateName: '#home-template',
         events: {
             'click button.add': 'renderAddForm'
         },
@@ -309,6 +313,9 @@
         loginSuccess: function (data) {
             app.session.save(data.token);
             window.location = '/static/index.html';
+        },
+        getContext: function (data) {
+            return {i18n: app.session.get('i18n')};
         }
     });
 
@@ -332,7 +339,7 @@
             if (app.session.get('user')!==null){
               username = app.session.get('user').get('username');
             };
-            return {authenticated: app.session.authenticated(), username: username};
+            return {authenticated: app.session.authenticated(), username: username, i18n: app.session.get('i18n')};
         },
         logout: function (event) {
             event.preventDefault();
@@ -341,9 +348,20 @@
         }
     });
 
+    var FooterView = TemplateView.extend({
+        tagName: 'footer',
+        templateName: '#footer-template',
+        getContext: function () {
+            return {i18n: app.session.get('i18n')};
+        }
+    });
+
     var AboutView = TemplateView.extend({
       tagName: 'about',
-      templateName: '#about-template'
+      templateName: '#about-template',
+      getContext: function () {
+        return {i18n: app.session.get('i18n')}
+      }
     })
 
     var EditView = FormView.extend({
@@ -419,7 +437,7 @@
                 message.set('full_text', text);
               }
             });
-            return {item: this.item, messages: messages, users: app.users};
+            return {item: this.item, messages: messages, users: app.users, i18n: app.session.get('i18n')};
         },
         render: function () {
             TemplateView.prototype.render.apply(this, arguments);
@@ -446,4 +464,5 @@
     app.views.MysiteView = MysiteView;
     app.views.EditView = EditView;
     app.views.AboutView = AboutView;
+    app.views.FooterView = FooterView;
 })(jQuery, Backbone, _, app);

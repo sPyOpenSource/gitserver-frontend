@@ -14,8 +14,11 @@
             this.contentElement = '#content';
             this.current = null;
             this.header = new app.views.HeaderView();
+            this.footer = new app.views.FooterView();
             $('body').prepend(this.header.el);
+            $('body').append(this.footer.el);
             this.header.render();
+            this.footer.render();
             Backbone.history.start();
         },
         home: function () {
@@ -57,11 +60,10 @@
             callback = callback || this[name];
             callback = _.wrap(callback, function (original) {
                 var args = _.without(arguments, original);
-                if (app.session.authenticated()) {
+                if (app.session.authenticated() || name === 'about' || name === 'help') {
                     original.apply(this, args);
                 } else {
                     // Show the login screen before calling the view
-                    //$(this.header.el).hide();
                     // Bind original callback once the login is successful
                     var view = new app.views.LoginView({el: this.contentElement});
                     this.render(view);

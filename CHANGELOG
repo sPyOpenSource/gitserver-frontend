@@ -1,3 +1,8 @@
+v1.4 XW 17-09-2017
+updated: help page (issue #12)
+added: image by detail view for an item (issue #9)
+added: translation to dutch (issue #6)
+
 v1.3 XW 10-09-2017
 fixed: item didn't loaded (issue #2)
 fixed: login agin with other account it get confused (issue #3)
