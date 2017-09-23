@@ -150,6 +150,9 @@
     var SettingsView = FormView.extend({
         templateName: '#settings-template',
         initialize: function (options){
+          if (document.getElementById("navbarCollapse").getAttribute('aria-expanded')){
+            $('#navbarCollapse').collapse('toggle');
+          }
           var self = this;
           TemplateView.prototype.initialize.apply(this, arguments);
           app.collections.ready.done(function() {
@@ -178,6 +181,9 @@
     var HelpView = TemplateView.extend({
         templateName: '#help-template',
         initialize: function (options){
+          if (document.getElementById("navbarCollapse").getAttribute('aria-expanded')){
+            $('#navbarCollapse').collapse('toggle');
+          }
           var self = this;
           TemplateView.prototype.initialize.apply(this, arguments);
           app.collections.ready.done(function() {
@@ -302,6 +308,13 @@
 
     var LoginView = FormView.extend({
         templateName: '#login-template',
+        initialize: function(options){
+          if (document.getElementById("navbarCollapse").getAttribute('aria-expanded')){
+            $('#navbarCollapse').collapse('toggle');
+          }
+          var self = this;
+          TemplateView.prototype.initialize.apply(this, arguments);
+        },
         submit: function (event) {
             var data = {};
             FormView.prototype.submit.apply(this, arguments);
@@ -320,7 +333,9 @@
     });
 
     var HeaderView = TemplateView.extend({
-        tagName: 'header',
+        tagName: 'nav',
+        id: 'myNavbar',
+        className: 'navbar navbar-default navbar inverse navbar-fixed-top',
         templateName: '#header-template',
         events: {
             'click a.logout': 'logout'

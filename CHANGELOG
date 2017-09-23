@@ -1,3 +1,9 @@
+v1.5 XW 23-09-2017
+updated: bootstrap to v3.3.7
+added: bootstrap.js v3.3.7
+added: custom css
+changed: navbar to dropdown-menu
+
 v1.4 XW 17-09-2017
 updated: help page (issue #12)
 added: image by detail view for an item (issue #9)

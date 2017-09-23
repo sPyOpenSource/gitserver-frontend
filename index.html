@@ -6,9 +6,11 @@
         <title>Refugive.com</title>
         <meta name="description" content="A refugee may need something. A local might have a spare item. Use this website to get in touch.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/bootstrap-responsive.min.css" type="text/css"/>
+        <link rel="stylesheet" href="/static/css/bootstrap.css">
         <script src="/static/vendor/jquery.js"></script>
+        <script src="/static/css/bootstrap.js"></script>
+
+        <link rel="stylesheet" href="/static/css/custom.css" type="text/css"/>
         <script type="text/html" id="about-template">
           <div class="intro">
             <div class="wrap">
@@ -91,19 +93,43 @@
 
         <script type="text/html" id="header-template">
               <% if (authenticated) { %>
-                <ul class="nav nav-tabs">
-                  <li role="presentation"><a href="#"><%=i18n.T('Home')%></a>
-                  <li role="presentation"><a href="#/settings"><%=i18n.T('Settings')%></a>
-                  <li role="presentation"><a href="#/help"><%=i18n.T('Help')%></a>
-                  <li role="presentation"><a href="#" class="logout"><%=i18n.T('Logout')%></a>
-                </ul>
+                  <div class="container">
+                    <div class="navbar-header">
+                      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                      </button>
+                      <a class="navbar-brand" href="#">Refugive.com</a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                      <ul class="nav navbar-nav">
+                        <li><a href="#/settings"><%=i18n.T('Settings')%></a></li>
+                        <li><a href="#/help"><%=i18n.T('Help')%></a></li>
+                        <li><a href="#" class="logout"><%=i18n.T('Logout')%></a></li>
+                      </ul>
+                    </div>
+                  </div>
               <% } else { %>
-                <ul class="nav nav-tabs">
-                  <li role="presentation"><a href="/"><%=i18n.T('Home')%></a>
-                  <li role="presentation"><a href="#/help"><%=i18n.T('Help')%></a>
-                  <li role="presentation"><a href="#"><%=i18n.T('Login')%></a>
-                  <li role="presentation"><a href="/adduser"><%=i18n.T('Register')%></a>
-                </ul>
+                  <div class="container">
+                    <div class="navbar-header">
+                      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                      </button>
+                      <a class="navbar-brand" href="/">Refugive.com</a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                      <ul class="nav navbar-nav">
+                        <li><a href="#/help"><%=i18n.T('Help')%></a></li>
+                        <li><a href="#"><%=i18n.T('Login')%></a></li>
+                        <li><a href="/adduser"><%=i18n.T('Register')%></a></li>
+                      </ul>
+                    </div>
+                  </div>
               <% } %>
         </script>
 
@@ -119,7 +145,9 @@
         </script>
 
         <script type="text/html" id="help-template">
+          <div class="intro">
                 <h1><%=i18n.T('Q & A')%></h1>
+          </div>
                 <hr>
                 <strong><p><%=i18n.T('How can I add an item?')%></p></strong>
                 <p><%=i18n.T('You can add an item by clicking on Add An Item button.')%></p>
