@@ -62,7 +62,7 @@
                 <hr>
                 <div class="factwrap">
                   <a href="#item/<%- item.get('id') %>">
-                    <h3 dir="ltr"><%=item.get('title')%></h3>
+                    <h3 dir="ltr" style="color:hsl(358,70%,56%)"><%=item.get('title')%></h3>
                   </a>
                   <% if (item.get('image') !== '') { %>
                     <div class="imgwrap">
@@ -249,8 +249,8 @@
         <script type="text/html" id="item-template">
           <div class="wrap">
             <section>
-              <input type="hidden" name="id" value="<%=item.get('id')%>">
               <h1 dir="ltr"><%=item.get('title')%></h1>
+              <input type="hidden" name="id" value="<%=item.get('id')%>">
               <div class="imgfactwrap">
                 <% if (item.get('image') !== '') { %>
                   <div>

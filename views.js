@@ -199,9 +199,12 @@
           }
           var self = this;
           TemplateView.prototype.initialize.apply(this, arguments);
-            app.groups.fetch({
-                success: $.proxy(self.render, self)
-            });
+          app.session.get('user').fetch({
+            success: $.proxy(self.render, self)
+          });
+          app.groups.fetch({
+            success: $.proxy(self.render, self)
+          });
         },
         submit: function (event) {
             var self = this,

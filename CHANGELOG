@@ -1,3 +1,7 @@
+v1.7 XW 01-10-2017
+fixed: settings email and username not loaded
+changed: title color to red
+
 v1.6 XW 01-10-2017
 added: notification when succesfully registered (issue #15)
 added: switch buttons for en and nl (issue #14)

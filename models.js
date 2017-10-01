@@ -146,8 +146,6 @@
         defaults: {
             token: null,
             user: null,
-            own_items: null,
-            others_items: null,
             item: null,
             i18n: null
         },
