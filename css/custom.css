@@ -1100,23 +1100,34 @@ form.posting {
   }
 }
 
-
-
-
 /* 22/9 addon */
+
+.navbar-brand{width:150px;height:45px;overflow:hidden;display:block;background-size:150px 45px;background-repeat:no-repeat;text-indent:-1000px;background-image:url("/static/media/logo-refugive.svg");-webkit-transition: all 0.2s ease;-moz-transition: all 0.2s ease;-ms-transition: all 0.2s ease;-o-transition: all 0.2s ease;transition: all 0.2s ease;}
 
 .intro{margin:0 -1000px;}
 
+@media only screen and (max-width: 35em) {
+	.navbar-brand{width:75px;height:29px;background-size:50px 15px;background-position:25px 14px;}
+}
+
+@media only screen and (max-width: 40em) {
+	.navbar-brand{width:125px;height:37px;background-size:100px 30px;background-position:25px 7px;}
+}
 
 @media(max-width:767px){
-  .container-fluid{width:95%;margin:70px auto 10px;}
-  .intro p,.intro h1{width:95%;margin:5px auto;display:block;}
+  .container-fluid{width:95%;margin:0px auto 10px;}
+  .intro p,.intro h1{width:500px;margin:5px auto;display:block;}
 }
-.container-fluid{width:750px;margin:70px auto 10px;}
+
 @media(min-width:768px) and (max-width:979px){
+  .container-fluid{width:750px;margin:0px auto 10px;}
   .intro p,.intro h1{width:750px;margin:10px auto;display:block;}
 }
-@media(min-width:980px){
-  .container-fluid{width:950px;margin:70px auto 10px;}
-  .intro p,.intro h1{width:750px;margin:15px auto;display:block;}
+@media(min-width:992px){
+  .container-fluid{width:970px;margin:0px auto 10px;}
+  .intro p,.intro h1{width:970px;margin:15px auto;display:block;}
+}
+@media(min-width:1200px){
+  .container-fluid{width:1170px;margin:0px auto 10px;}
+  .intro p,.intro h1{width:1170px;margin:15px auto;display:block;}
 }

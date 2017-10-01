@@ -1,3 +1,7 @@
+v1.6 XW 01-10-2017
+added: notification when succesfully registered (issue #15)
+added: switch buttons for en and nl (issue #14)
+
 v1.5 XW 23-09-2017
 updated: bootstrap to v3.3.7
 added: bootstrap.js v3.3.7

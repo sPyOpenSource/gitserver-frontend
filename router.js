@@ -1,17 +1,20 @@
 (function ($, Backbone, _, app) {
-
     var AppRouter = Backbone.Router.extend({
         routes: {
             '': 'home',
             'item/:id': 'item',
             'edit/:id': 'edit',
             'settings': 'settings',
-            'items': 'items',
             'help': 'help',
-            'about': 'about'
+            'about': 'about',
+            'user': 'user',
+            'password/:key': 'password',
+            'login': 'login',
+            'success': 'success'
         },
         initialize: function (options) {
             this.contentElement = '#content';
+            this.message = '#message';
             this.current = null;
             this.header = new app.views.HeaderView();
             this.footer = new app.views.FooterView();
@@ -22,6 +25,10 @@
             Backbone.history.start();
         },
         home: function () {
+            var view = new app.views.HomepageView({el: this.contentElement});
+            this.render(view);
+        },
+        login: function(){
             var view = new app.views.HomepageView({el: this.contentElement});
             this.render(view);
         },
@@ -43,24 +50,41 @@
             });
             this.render(view);
         },
+        password: function(key){
+            var view = new app.views.PasswordView({
+                el: this.contentElement,
+                key: key
+            });
+            this.render(view);
+        },
         settings: function(){
-          var view = new app.views.SettingsView({el: this.contentElement});
-          this.render(view);
+            var view = new app.views.SettingsView({el: this.contentElement});
+            this.render(view);
         },
         help: function(){
-          var view = new app.views.HelpView({el: this.contentElement});
-          this.render(view);
+            var view = new app.views.HelpView({el: this.contentElement});
+            this.render(view);
         },
         about: function(){
-          var view = new app.views.AboutView({el: this.contentElement});
-          this.render(view);
+            var view = new app.views.AboutView({el: this.contentElement});
+            this.render(view);
+        },
+        user: function(){
+            var view = new app.views.NewUserView({el: this.contentElement});
+            this.render(view);
+        },
+        success: function(){
+            var view = new app.views.SecondView({el: this.message});
+            this.render(view);
+            var view = new app.views.HomepageView({el: this.contentElement});
+            this.render(view);
         },
         route: function (route, name, callback) {
             // Override default route to enforce login on every page
             callback = callback || this[name];
             callback = _.wrap(callback, function (original) {
                 var args = _.without(arguments, original);
-                if (app.session.authenticated() || name === 'about' || name === 'help') {
+                if (app.session.authenticated() || -1 !== $.inArray(name, ['about', 'help', 'user', 'password', 'home', 'success'])) {
                     original.apply(this, args);
                 } else {
                     // Show the login screen before calling the view
@@ -83,5 +107,4 @@
     });
 
     app.router = AppRouter;
-
 })(jQuery, Backbone, _, app);

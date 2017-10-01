@@ -8,8 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/static/css/bootstrap.css">
         <script src="/static/vendor/jquery.js"></script>
-        <script src="/static/css/bootstrap.js"></script>
-
+        <script src="/static/bootstrap.js"></script>
         <link rel="stylesheet" href="/static/css/custom.css" type="text/css"/>
         <script type="text/html" id="about-template">
           <div class="intro">
@@ -17,7 +16,6 @@
               <h1>Refugive.com: <%=i18n.T('a marketplace for refugees and neighbours')%></h1>
             </div>
           </div>
-          <hr>
           <div class="main itempage">
             <div class="wrap">
               <section>
@@ -47,141 +45,173 @@
         </script>
 
         <script type="text/html" id="home-template">
+          <div class="intro">
+            <p>
+              <%=i18n.T('A refugee may need something.')%>
+              <%=i18n.T('A local may have a spare item.')%>
+              <%=i18n.T('You can use this website to get in touch with each other.')%>
+            </p>
+          </div>
+          <% if (authenticated) { %>
+            <br>
             <button class="add btn btn-default"><%=i18n.T('Add An Item')%></button>
-            <% if (items !== null) { %>
-              <div class="items">
-                   <% _.each(items.models, function (item) { %>
-                     <hr>
-                     <div>
-                         <div class="factwrap">
-                           <a href="#item/<%- item.get('id') %>">
-                             <h3 dir="ltr"><%=item.get('title')%></h3>
-                           </a>
-                           <% if (item.get('image') !== '') { %>
-                             <div class="imgwrap">
-                               <img src="https://res.cloudinary.com/dvrrqjzay/image/upload/c_fill,h_300,w_400/<%=item.get('image')%>.jpg">
-                             </div>
-                           <% } %>
-                           <div class="factoids">
-                             <div>
-                               <%=i18n.T('Category')%>
-                               <% _.each(categories.models, function (category) { %>
-                                 <% if ('http://localhost:8000/api/categories/'+category.get('id') === item.get('category')) { %>
-                                    <strong><%=i18n.T(category.get('name'))%></strong>
-                                 <% } %>
-                               <% }); %>
-                             </div>
-                           </div>
-                         </div>
-                     </div>
-                   <% }); %>
-               </div>
-            <% } %>
+          <% } %>
+          <% if (demos !== null) { %>
+            <div class="items">
+              <% _.each(demos.models, function (item) { %>
+                <hr>
+                <div class="factwrap">
+                  <a href="#item/<%- item.get('id') %>">
+                    <h3 dir="ltr"><%=item.get('title')%></h3>
+                  </a>
+                  <% if (item.get('image') !== '') { %>
+                    <div class="imgwrap">
+                      <img src="https://res.cloudinary.com/dvrrqjzay/image/upload/c_fill,h_300,w_400/<%=item.get('image')%>.jpg">
+                    </div>
+                  <% } %>
+                  <div class="factoids">
+                    <%=i18n.T('Category')%>
+                    <strong><%=i18n.T(item.get('category'))%></strong>
+                  </div>
+                </div>
+              <% }); %>
+            </div>
+          <% } %>
         </script>
 
         <script type="text/html" id="login-template">
-            <form action="" method="post">
-                <label for="id_email"><%=i18n.T('E-mail')%>:</label>
-                <input id="id_email" type="text" name="email" pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" required />
-                <label for="id_password"><%=i18n.T('Password')%>:</label>
-                <input id="id_password" type="password" name="password" required />
-                <br>
-                <button type="submit" class="btn btn-dafault"><%=i18n.T('Submit')%></button>
-                <a href="/nl/resetpassword/" class="reset"><%=i18n.T('I lost my password')%></a>
-            </form>
+          <form action="" method="post">
+            <label for="id_email"><%=i18n.T('E-mail')%>:</label>
+            <input id="id_email" type="text" name="email" pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" required />
+            <label for="id_password"><%=i18n.T('Password')%>:</label>
+            <input id="id_password" type="password" name="password" required />
+            <button type="submit" class="btn btn-dafault"><%=i18n.T('Submit')%></button>
+            <a href="#/password/reset" class="btn btn-default"><%=i18n.T('I lost my password')%></a>
+          </form>
+          <br>
+        </script>
+
+        <script type="text/html" id="password-template">
+          <form action="/nl/resetpassword/" method="post">
+            <input name="csrfmiddlewaretoken" value="<%=csrf_token.get('csrf_token')%>" type="hidden">
+            <% if (key === "reset") { %>
+              <h1><%=i18n.T('So you forgot your password?')%></h1>
+              <p><%=i18n.T('Do not worry!')%> <%=i18n.T('Fill in your email address below and we will send you a link to reset your password.')%></p>
+              <label for="id_email"><%=i18n.T('E-mail')%>:</label>
+              <input id="id_email" type="text" name="email" pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" required />
+            <% } else { %>
+              <h1><%=i18n.T('So you want to change your password?')%></h1>
+              <p><%=i18n.T('Enter your new password here')%>:</p>
+              <input id="id_password" type="password" name="password" required maxlength="50"/>
+            <% } %>
+            <button type="submit" class="btn btn-dafault"><%=i18n.T('Submit')%></button>
+          </form>
         </script>
 
         <script type="text/html" id="header-template">
-              <% if (authenticated) { %>
-                  <div class="container">
-                    <div class="navbar-header">
-                      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                      </button>
-                      <a class="navbar-brand" href="#">Refugive.com</a>
-                    </div>
-                    <div class="collapse navbar-collapse" id="navbarCollapse">
-                      <ul class="nav navbar-nav">
-                        <li><a href="#/settings"><%=i18n.T('Settings')%></a></li>
-                        <li><a href="#/help"><%=i18n.T('Help')%></a></li>
-                        <li><a href="#" class="logout"><%=i18n.T('Logout')%></a></li>
-                      </ul>
-                    </div>
-                  </div>
-              <% } else { %>
-                  <div class="container">
-                    <div class="navbar-header">
-                      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                      </button>
-                      <a class="navbar-brand" href="/">Refugive.com</a>
-                    </div>
-                    <div class="collapse navbar-collapse" id="navbarCollapse">
-                      <ul class="nav navbar-nav">
-                        <li><a href="#/help"><%=i18n.T('Help')%></a></li>
-                        <li><a href="#"><%=i18n.T('Login')%></a></li>
-                        <li><a href="/adduser"><%=i18n.T('Register')%></a></li>
-                      </ul>
-                    </div>
-                  </div>
-              <% } %>
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">Refugive.com</a>
+              <button class="nl">NL</button>
+              <button class="en">EN</button>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+              <ul class="nav navbar-nav">
+                <li><a href="#/help"><%=i18n.T('Help')%></a></li>
+                <% if (authenticated) { %>
+                  <li><a href="#/settings"><%=i18n.T('Settings')%></a></li>
+                  <li><a href="#" class="logout"><%=i18n.T('Logout')%></a></li>
+                <% } else { %>
+                  <li><a href="#/login"><%=i18n.T('Login')%></a></li>
+                  <li><a href="#/user"><%=i18n.T('Register')%></a></li>
+                <% } %>
+              </ul>
+            </div>
+          </div>
         </script>
 
         <script type="text/html" id="footer-template">
-          <div class="wrap">
-           <div class="opm">
-             <p><%=i18n.T('What is Refugive.com and how does it work?')%> <a href="#/about"><%=i18n.T('About us')%></a></p>
-             <div>
-             	<%=i18n.T('Tips, suggestions, complaints or questions?')%> <%=i18n.T('Please')%> <a href="https://docs.google.com/forms/d/1i1wh3T_YJY1ts8wx7yeRCALiPjtDDbrabWn5tuvx1Xg/viewform"><%=i18n.T('give us feedback')%></a>
-             </div>
-           </div>
-         </div>
+          <div class="container-fluid">
+            <div class="opm">
+              <p><%=i18n.T('What is Refugive.com and how does it work?')%> <a href="#/about"><%=i18n.T('About us')%></a></p>
+              <div>
+                <%=i18n.T('Tips, suggestions, complaints or questions?')%> <%=i18n.T('Please')%> <a href="https://docs.google.com/forms/d/1i1wh3T_YJY1ts8wx7yeRCALiPjtDDbrabWn5tuvx1Xg/viewform"><%=i18n.T('give us feedback')%></a>
+              </div>
+            </div>
+          </div>
         </script>
 
         <script type="text/html" id="help-template">
           <div class="intro">
-                <h1><%=i18n.T('Q & A')%></h1>
+            <h1><%=i18n.T('Q & A')%></h1>
           </div>
-                <hr>
-                <strong><p><%=i18n.T('How can I add an item?')%></p></strong>
-                <p><%=i18n.T('You can add an item by clicking on Add An Item button.')%></p>
-                <strong><p><%=i18n.T('How can I change my personal information?')%></p></strong>
-                <p><%=i18n.T('You can change your information by click on Settings tab.')%></p>
-                <strong><p><%=i18n.T('How can I react on an item?')%></p></strong>
-                <p><%=i18n.T('You can react on an item by clicking on Reply button after clicking on the item.')%></p>
+          <br>
+          <strong><p><%=i18n.T('How can I create an account?')%></p></strong>
+          <p><%=i18n.T('You can create an account by clicking on Register.')%></p>
+          <strong><p><%=i18n.T('How can I add an item?')%></p></strong>
+          <p><%=i18n.T('You can add an item by clicking on Add An Item button.')%></p>
+          <strong><p><%=i18n.T('How can I change my personal information?')%></p></strong>
+          <p><%=i18n.T('You can change your information by click on Settings tab.')%></p>
+          <strong><p><%=i18n.T('How can I react on an item?')%></p></strong>
+          <p><%=i18n.T('You can react on an item by clicking on Reply button after clicking on the item.')%></p>
+
         </script>
 
         <script type="text/html" id="settings-template">
-            <form action="/nl/adduser" method="post">
-              <label for="id_email"><%=i18n.T('E-mail')%>:</label>
-              <input id="id_email" type="text" name="email" value="<%=_.escape(user.get('email'))%>" required />
-              <label for="id_username"><%=i18n.T('Username')%>:</label>
-              <input id="id_username" type="text" name="username" value="<%=_.escape(user.get('username'))%>" required/>
-              <% if (groups !== null) { %>
-                <label for="id_group"><%=i18n.T('Group')%>: </label>
-                <select id='id_group' name='group'>
-                  <% _.each(groups.models, function(group){ %>
-                    <% if(group.get('url') === user.get('group')){ %>
-                      <option value="<%=_.escape(group.get('url'))%>" selected="true"><%=i18n.T(group.get('name'))%></option>
-                    <% } else { %>
-                      <option value="<%=_.escape(group.get('url'))%>"><%=i18n.T(group.get('name'))%></option>
-                    <% } %>
-                  <% }); %>
-                </select>
-              <% } %>
-              <br>
-              <button type="submit" class="btn btn-dafault"><%=i18n.T('Save')%></button>
-            </form>
+          <form action="/<%=i18n.getLanguage()%>/adduser" method="post">
+            <label for="id_email"><%=i18n.T('E-mail')%>:</label>
+            <input id="id_email" type="text" name="email" value="<%=_.escape(user.get('email'))%>" required pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"/>
+            <label for="id_username"><%=i18n.T('Username')%>:</label>
+            <input id="id_username" type="text" name="username" value="<%=_.escape(user.get('username'))%>" required/>
+            <% if (groups !== null) { %>
+              <label for="id_group"><%=i18n.T('Group')%>: </label>
+              <select id='id_group' name='group'>
+                <% _.each(groups.models, function(group){ %>
+                  <% if(group.get('url') === user.get('group')){ %>
+                    <option value="<%=_.escape(group.get('url'))%>" selected="true"><%=i18n.T(group.get('name'))%></option>
+                  <% } else { %>
+                    <option value="<%=_.escape(group.get('url'))%>"><%=i18n.T(group.get('name'))%></option>
+                  <% } %>
+                <% }); %>
+              </select>
+            <% } %>
+            <br>
+            <button type="submit" class="btn btn-dafault"><%=i18n.T('Save')%></button>
+          </form>
+        </script>
+
+        <script type="text/html" id="new-user-template">
+          <form action="/<%=i18n.getLanguage()%>/adduser" method="post">
+            <input name="csrfmiddlewaretoken" value="<%=csrf_token.get('csrf_token')%>" type="hidden">
+            <label for="id_email"><%=i18n.T('E-mail')%>:</label>
+            <input id="id_email" type="text" name="email" required pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"/>
+            <label for="id_username"><%=i18n.T('Username')%>:</label>
+            <input id="id_username" type="text" name="username" required/>
+            <label for="id_password"><%=i18n.T('Password')%>:</label>
+            <input type="password" id="id_password" name="password"/ required/>
+            <% if (groups !== null) { %>
+              <label for="id_group"><%=i18n.T('Group')%>: </label>
+              <select id='id_group' name='group_id' required>
+                <option value=""></option>
+                <% _.each(groups.models, function(group){ %>
+                    <option value="<%=group.get('id')%>"><%=i18n.T(group.get('name'))%></option>
+                <% }); %>
+              </select>
+            <% } %>
+            <br>
+            <button type="submit" class="btn btn-dafault"><%=i18n.T('Save')%></button>
+          </form>
+          <br>
         </script>
 
         <script type="text/html" id="new-item-template">
-          <form action="/nl/image" method="post" enctype="multipart/form-data">
+          <form action="/api/image" method="post" enctype="multipart/form-data">
             <label for="id_title"><%=i18n.T('Title')%>:</label>
             <input name="csrfmiddlewaretoken" value="<%=csrf_token.get('csrf_token')%>" type="hidden">
             <input id="id_title" type="text" name="title" maxlength="100" required />
@@ -211,7 +241,6 @@
             <textarea id="id_text" name="text" cols="50"></textarea>
             <input type="hidden" name="owner" value="<%=user.get('url')%>">
             <input type="hidden" name="item" value="http://localhost:8000/api/items/<%=item.get('id')%>">
-            <br>
             <button class="cancel btn btn-dafault"><%=i18n.T('Cancel')%></button>
             <button type="submit" class="btn btn-dafault"><%=i18n.T('Create')%></button>
           </form>
@@ -275,29 +304,28 @@
                     <option value="<%=_.escape('http://localhost:8000/api/categories/'+category.get('id'))%>" selected><%=_.escape(category.get('name'))%></option>
                   <% }; %>
                 <% }); %>
-              </section>
+              </select>
             <% } %>
           </form>
         </script>
     </head>
     <body>
-        <div class="container-fluid" id="content"></div>
-        <script src="vendor/underscore.js"></script>
-        <script src="vendor/backbone.js"></script>
-        <script id="config" type="text/json">
-            {
-                "models": {},
-                "collections": {},
-                "views": {},
-                "router": null,
-                "apiRoot": "/api/",
-                "apiLogin": "/api-token-auth/"
-            }
-        </script>
-        <script src="app.js"></script>
-        <script src="models.js"></script>
-        <script src="views.js"></script>
-        <script src="router.js"></script>
-        <hr>
+      <div class="container-fluid" id="message"></div>
+      <div class="container-fluid" id="content"></div>
+      <script src="vendor/underscore.js"></script>
+      <script src="vendor/backbone.js"></script>
+      <script id="config" type="text/json">
+        {
+          "models": {},
+          "collections": {},
+          "views": {},
+          "router": null,
+          "apiLogin": "/api-token-auth/"
+        }
+      </script>
+      <script src="app.js"></script>
+      <script src="models.js"></script>
+      <script src="views.js"></script>
+      <script src="router.js"></script>
     </body>
 </html>

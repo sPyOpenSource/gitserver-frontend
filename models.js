@@ -54,17 +54,17 @@
     app.models.i18n = BaseModel.extend({
         defaults: {
           nl: {
-            'a marketplace for refugees and neighbours': 'een marketplaats voor vluchetellingen en buurbewoners',
-            'Refugive.com is a website created and used by the people from the neighbourhood.': 'Refugive.com is een website die gemaakt en gebruikt door de buurbewoners.',
-            'This site is created to match the wishes of refugees to the openheartness from the locals.': 'Deze website is gemaakt om de wensen van de vluchetellingen te passen bij de openhartigheid van de buurbewoners.',
-            'You may found clothes, books, games etc.': 'Jij kan kleren, boeken, speltjes etc vinden.',
-            'For examples: how about cooking a meal or doing sports together?': 'Bijvoorbeelden: hoe is het om een maaltijd te komen of samen sport gaan doen?',
-            'Do you need something (as a refugee) or you have clothes spare (as a local)?': 'Heb je iets nodig (als een vluchetelling) of heb je kleren te veel (als een buurbewoner)?',
+            'a marketplace for refugees and neighbours': 'een marketplaats voor vluchtelingen en buurtbewoners',
+            'Refugive.com is a website created and used by the people from the neighbourhood.': 'Refugive.com is een website die door de buurtbewoners is gemaakt en gebruikt.',
+            'This site is created to match the wishes of refugees to the openheartness from the locals.': 'Deze website is gemaakt om de wensen van de vluchtelingen te passen aan de openhartigheid van de buurtbewoners.',
+            'You may found clothes, books, games etc.': 'Jij vindt kleren, boeken, speltjes, activiteits etc.',
+            'For examples: how about cooking a meal or doing sports together?': 'Bijvoorbeelden: hoe is het om samen een maaltijd te koken of sport gaan doen?',
+            'Do you need something (as a refugee) or you have clothes spare (as a local)?': 'Heb je iets nodig (als een vluchteling) of heb je iets te veel (als een buurtbewoner)?',
             'Take a look on Refugive.com and meet your new neighbours from there!': 'Nemen een kijk op Refugive.com en ontmoeten jouw nieuwe buren!',
-            'If you are a refugee, then it is for you free to advertise your needs and wishes on it.': 'Als je een vluchetelling ben, dan is het voor jou gratis om een advertentie te plaatsen voor wat je nodig hebt en wat je wenst.',
-            'It is also free for the locals, but offers should be made within a walking distance from the refugee center.': 'Het is ook gratis voor buurbewoners, maar de aanbod moet binnen de loop afstand vanaf de asielzoek center zijn.',
-            'No money should be traded for exhange the goods.': 'Er mag geen geld worden gehandeld voor goederen.',
-            'Refugive.com was started by a group of people in Bezuidenhout (The Hague) in order to help refugees from their neighbourhood.': 'Refugive.com is gestart bij een groep mensen uit Bezuidenhout (Den Haag) om de vluchetellingen te helpen in zijn buurt.',
+            'If you are a refugee, then it is for you free to advertise your needs and wishes on it.': 'Als je een vluchteling ben, dan is het voor jou gratis om advertenties te plaatsen.',
+            'It is also free for the locals, but offers should be made within a walking distance from the refugee center.': 'Het is ook gratis voor buurtbewoners, maar de aanbod moet binnen de loop afstand vanaf het AZC zijn.',
+            'No money should be traded for exhange the goods.': 'Er mag geen geld worden gehandeld voor goederen of activiteits.',
+            'Refugive.com was started by a group of people in Bezuidenhout (The Hague) in order to help refugees from their neighbourhood.': 'Refugive.com is gestart bij een groep mensen uit Bezuidenhout (Den Haag) om de vluchtelingen te helpen.',
             'Refugive.com is a non-profit website.': 'Refugive.com is een non-profit website.',
             'Best regards,': 'Met vriendelijke groeten,',
             'and': 'en',
@@ -78,7 +78,6 @@
             'Password': 'Wachtwoord',
             'Submit': 'Verzenden',
             'I lost my password': 'Wachtwoord vergeten',
-            'Home': 'Hoofdpagina',
             'Settings': 'Instellingen',
             'Help': 'Hulp',
             'Logout': 'Uitloggen',
@@ -102,28 +101,36 @@
             'since': 'sinds',
             'Reply': 'Reageren',
             'Message': 'Bericht',
-            'Local resident': 'Buurbewoner',
+            'Local resident': 'Buurtbewoner',
             'AZC resident': 'AZC bewoner',
+            'How can I create an account?': 'Hoe kan ik een account maken?',
+            'You can create an account by clicking on Register.': 'Jij kan op Registeren klikken.',
             'How can I add an item?': 'Hoe kan ik een advertentie toevoegen?',
             'You can add an item by clicking on Add An Item button.': 'Jij moet op Een Advertentie Toevoegen knop drukken.',
             'How can I change my personal information?': 'Hoe kan ik mijn personelijk gegevens aanpassen?',
             'You can change your information by click on Settings tab.': 'Jij kan jouw gegevens aanpassen in de Instellingen tab.',
             'How can I react on an item?': 'Hoe kan ik op een advertentie reageren?',
-            'You can react on an item by clicking on Reply button after clicking on the item.': 'Jij kan op een advertentie reageren door op de Reageren knop te drukken na dat je die advertentie hebt gekozen.'
+            'You can react on an item by clicking on Reply button after clicking on the item.': 'Jij kan op een advertentie reageren door op de Reageren knop te drukken na dat je die advertentie hebt gekozen.',
+            'A refugee may need something.': 'Een vluchteling heeft iets nodig.',
+            'A local may have a spare item.': 'Een buurtbewoner heeft iets over.',
+            'You can use this website to get in touch with each other.': 'Gebruik deze website om met elkaar in contact te komen.',
+            'So you forgot your password?': 'Ben je je wachtwoord kwijt?',
+            'Do not worry!': 'Maak je geen zorgen.',
+            'Fill in your email address below and we will send you a link to reset your password.': 'Vul hieronder je e-mail adres in. We sturen je dan een link waar je je wachtwoord mee kan resetten.',
+            'So you want to change your password?': 'Wil je je wachtwoord veranderen?',
+            'Enter your new password here': 'Vul hier je nieuwe wachtwoord in'
           }
         },
         getLanguage: function () {
-            return 'nl';
-            var lang;
-            if (navigator.language) {
-                lang = navigator.language;
-            } else if (navigator.userLanguage) {
-                lang = navigator.userLanguage;
+            var lang = localStorage.language;
+            if(lang){
+              return lang;
+            } else {
+              return 'nl';
             }
-            if (lang && lang.length > 2) {
-               lang = lang.substring(0, 2);
-            }
-            return lang;
+        },
+        setLanguage: function(language) {
+          localStorage.language = language;
         },
         T: function (text) {
           var translation = this.get(this.getLanguage());
@@ -201,7 +208,7 @@
     });
 
     app.models.csrf_token = BaseModel.extend({
-        urlRoot: '/nl/image'
+        urlRoot: '/api/image'
     });
 
     app.models.Item = BaseModel.extend({
@@ -220,50 +227,57 @@
         urlRoot: '/api/messages'
     })
 
-    app.collections.ready = $.getJSON(app.apiRoot);
-    app.collections.ready.done(function (data) {
-        app.collections.Dialogues = Backbone.Collection.extend({
-            model: app.models.Dialogue,
-            url: '/api/dialogues'
-        })
-        app.dialogues = new app.collections.Dialogues();
+    app.models.Demo = BaseModel.extend({
+        urlRoot: '/api/demos'
+    })
 
-        app.collections.Messages = Backbone.Collection.extend({
-            model: app.models.Message,
-            url: '/api/messages'
-        })
-        app.messages = new app.collections.Messages();
+    app.collections.Dialogues = Backbone.Collection.extend({
+        model: app.models.Dialogue,
+        url: '/api/dialogues'
+    })
+    app.dialogues = new app.collections.Dialogues();
 
-        app.collections.Categories = Backbone.Collection.extend({
-            model: app.models.Category,
-            url: '/api/categories'
-        });
-        app.categories = new app.collections.Categories();
+    app.collections.Messages = Backbone.Collection.extend({
+        model: app.models.Message,
+        url: '/api/messages'
+    })
+    app.messages = new app.collections.Messages();
 
-        app.collections.Items = Backbone.Collection.extend({
-            model: app.models.Item,
-            url: '/api/items',
-            comparator: function(m) {
-              var date = new Date(m.get('creationdate'));
-              return -date.getTime();
-            }
-        });
-        app.items = new app.collections.Items();
-
-        app.session.set('own_items', new app.collections.Items());
-        app.session.set('others_items', new app.collections.Items());
-
-        app.collections.Users = Backbone.Collection.extend({
-            model: app.models.User,
-            url: '/api/users'
-        });
-        app.users = new app.collections.Users();
-
-        app.collections.Groups = Backbone.Collection.extend({
-            model: app.models.Group,
-            url: '/api/groups'
-        });
-        app.groups = new app.collections.Groups();
+    app.collections.Categories = Backbone.Collection.extend({
+        model: app.models.Category,
+        url: '/api/categories'
     });
+    app.categories = new app.collections.Categories();
 
+    app.collections.Items = Backbone.Collection.extend({
+        model: app.models.Item,
+        url: '/api/items',
+        comparator: function(m) {
+          var date = new Date(m.get('creationdate'));
+          return -date.getTime();
+        }
+    });
+    app.items = new app.collections.Items();
+
+    app.collections.Users = Backbone.Collection.extend({
+        model: app.models.User,
+        url: '/api/users'
+    });
+    app.users = new app.collections.Users();
+
+    app.collections.Groups = Backbone.Collection.extend({
+        model: app.models.Group,
+        url: '/api/groups'
+    });
+    app.groups = new app.collections.Groups();
+
+    app.collections.Demos = Backbone.Collection.extend({
+        model: app.models.Demo,
+        url: '/api/demos',
+        comparator: function(m) {
+          var date = new Date(m.get('creationdate'));
+          return -date.getTime();
+        }
+    });
+    app.demos = new app.collections.Demos();
 })(jQuery, Backbone, _, app);

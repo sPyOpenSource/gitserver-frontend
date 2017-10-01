@@ -1,5 +1,4 @@
 (function ($, Backbone, _, app) {
-
     var TemplateView = Backbone.View.extend({
         initialize: function () {
             this.template = _.template($(this.templateName).html());
@@ -13,6 +12,23 @@
             return {};
         }
     });
+
+    var ServerFormView = TemplateView.extend({
+      events: {
+        'click button.cancel': 'done'
+      },
+      done: function (event) {
+          if (event) {
+              event.preventDefault();
+          }
+          this.trigger('done');
+          this.remove();
+      },
+      success: function (model) {
+          this.done();
+          window.location.hash = '#';
+      }
+    })
 
     var FormView = TemplateView.extend({
         events: {
@@ -45,7 +61,6 @@
         submit: function (event) {
             event.preventDefault();
             this.form = $(event.currentTarget);
-            //console.log(this.form);
             this.clearErrors();
         },
         failure: function (xhr, status, error) {
@@ -73,12 +88,10 @@
                 attributes = {};
             FormView.prototype.submit.apply(this, arguments);
             attributes = this.serializeForm(this.form);
-            app.collections.ready.done(function () {
-                app.messages.create(attributes, {
-                    wait: true,
-                    success: $.proxy(self.success, self),
-                    error: $.proxy(self.modelFailure, self)
-                });
+            app.messages.create(attributes, {
+              wait: true,
+              success: $.proxy(self.success, self),
+              error: $.proxy(self.modelFailure, self)
             });
         },
         getContext: function () {
@@ -94,10 +107,7 @@
         }
     });
 
-    var NewItemView = TemplateView.extend({
-        events: {
-          'click button.cancel': 'done'
-        },
+    var NewItemView = ServerFormView.extend({
         templateName: '#new-item-template',
         className: 'new-item',
         initialize: function (options){
@@ -107,43 +117,77 @@
           this.csrf_token.fetch({
             success: $.proxy(self.render, self)
           });
-          app.collections.ready.done(function() {
-            app.categories.fetch({
-                success: $.proxy(self.render, self)
-            });
+          app.categories.fetch({
+            success: $.proxy(self.render, self)
           });
         },
-        submit: function (event) {
-            var self = this,
-                attributes = {};
-            FormView.prototype.submit.apply(this, arguments);
-            attributes = this.serializeForm(this.form);
-            app.collections.ready.done(function () {
-                app.items.create(attributes, {
-                    wait: true,
-                    success: $.proxy(self.success, self),
-                    error: $.proxy(self.modelFailure, self)
-                });
-            });
+        getContext: function () {
+          return {
+            owner: app.session.get('user'),
+            categories: app.categories || null,
+            csrf_token: this.csrf_token,
+            i18n: app.session.get('i18n')
+          };
+        }
+    });
+
+    var NewUserView = ServerFormView.extend({
+        templateName: '#new-user-template',
+        className: 'new-user',
+        initialize: function (options){
+          if (document.getElementById("navbarCollapse").getAttribute('aria-expanded')){
+            $('#navbarCollapse').collapse('toggle');
+          }
+          var self = this;
+          TemplateView.prototype.initialize.apply(this, arguments);
+          this.csrf_token = new app.models.csrf_token();
+          this.csrf_token.fetch({
+            success: $.proxy(self.render, self)
+          });
+          app.groups.fetch({
+            success: $.proxy(self.render, self)
+          });
         },
         getContext: function () {
             return {
-              owner: app.session.get('user'),
-              categories: app.categories || null,
+              groups: app.groups || null,
               csrf_token: this.csrf_token,
               i18n: app.session.get('i18n')
             };
+        }
+    });
+
+    var SecondView = Backbone.View.extend({
+        initialize: function(){
+          this.render();
         },
-        done: function (event) {
-            if (event) {
-                event.preventDefault();
-            }
-            this.trigger('done');
-            this.remove();
+        render: function(){
+          var template = _.template('<script>$("#test").fadeOut(3000);</script><div id="test" class="alert alert-success"><strong>Success!</strong> This alert box could indicate a successful or positive action.</div>');
+          this.$el.html(template);
+        }
+    });
+
+    var ResetPasswordView = ServerFormView.extend({
+        templateName: '#password-template',
+        className: 'reset-password',
+        initialize: function (options){
+          if (document.getElementById("navbarCollapse").getAttribute('aria-expanded')){
+            $('#navbarCollapse').collapse('toggle');
+          }
+          var self = this;
+          TemplateView.prototype.initialize.apply(this, arguments);
+          this.csrf_token = new app.models.csrf_token();
+          this.csrf_token.fetch({
+            success: $.proxy(self.render, self)
+          });
+          this.key = options.key;
         },
-        success: function (model) {
-            this.done();
-            window.location.hash = '#';
+        getContext: function () {
+            return {
+              key: this.key,
+              csrf_token: this.csrf_token,
+              i18n: app.session.get('i18n')
+            };
         }
     });
 
@@ -155,11 +199,9 @@
           }
           var self = this;
           TemplateView.prototype.initialize.apply(this, arguments);
-          app.collections.ready.done(function() {
             app.groups.fetch({
                 success: $.proxy(self.render, self)
             });
-          });
         },
         submit: function (event) {
             var self = this,
@@ -186,14 +228,9 @@
           }
           var self = this;
           TemplateView.prototype.initialize.apply(this, arguments);
-          app.collections.ready.done(function() {
-            app.groups.fetch({
-                success: $.proxy(self.render, self)
-            });
-          });
         },
         getContext: function () {
-            return {groups: app.groups || null, user: app.session.get('user'), i18n: app.session.get('i18n')};
+            return {i18n: app.session.get('i18n')};
         }
     });
 
@@ -203,94 +240,20 @@
             'click button.add': 'renderAddForm'
         },
         initialize: function (options) {
-            var self = this;
-            TemplateView.prototype.initialize.apply(this, arguments);
-            app.collections.ready.done(function () {
-                var now = new Date();
-                now = now.toISOString().replace(/T.*/g, '');
-                app.items.fetch({
-                  data: {expirydate: now},
-                  success: $.proxy(self.render, self)
-                });
-                app.users.fetch({
-                  success: $.proxy(self.render, self)
-                });
-                app.categories.fetch({
-                  success: $.proxy(self.render, self)
-                })
+          if (document.getElementById("navbarCollapse").getAttribute('aria-expanded')){
+            $('#navbarCollapse').collapse('toggle');
+          }
+          var self = this;
+          TemplateView.prototype.initialize.apply(this, arguments);
+            app.demos.fetch({
+              success: $.proxy(self.render, self)
             });
         },
         getContext: function () {
-            if (typeof app.items !== 'undefined'){
-              _.each(app.items.models, function(item){
-                _.each(app.users.models, function(user){
-                  if ((user.get('group') !== app.session.get('user').get('group')) && (user.get('url') === item.get('owner'))){
-                    app.session.get('others_items').add(item);
-                  }
-                });
-              });
-            }
             return {
-              items: app.items.sort() || null,
-              users: app.users || null,
-              categories: app.categories || null,
-              owner: app.session.get('user'),
-              i18n: app.session.get('i18n')
-            };
-        },
-        renderAddForm: function (event) {
-            var view = new NewItemView(),
-                link = $(event.currentTarget);
-            event.preventDefault();
-            link.before(view.el);
-            link.hide();
-            view.render();
-            view.on('done', function () {
-                link.show();
-            });
-        }
-    });
-
-    var MysiteView = TemplateView.extend({
-        templateName: '#home-template',
-        events: {
-            'click button.add': 'renderAddForm'
-        },
-        initialize: function (options) {
-            var self = this;
-            TemplateView.prototype.initialize.apply(this, arguments);
-            app.collections.ready.done(function () {
-                var now = new Date();
-                now = now.toISOString().replace(/T.*/g, '');
-                app.items.fetch({
-                  data: {expirydate: now},
-                  success: $.proxy(self.render, self)
-                });
-                app.categories.fetch({
-                  success: $.proxy(self.render, self)
-                });
-                app.messages.fetch({
-                  success: $.proxy(self.render, self)
-                });
-                app.users.fetch({
-                  success: $.proxy(self.render, self)
-                });
-            });
-        },
-        getContext: function () {
-            if (typeof app.items !== 'undefined'){
-              _.each(app.items.models, function(item){
-                if(item.get('owner')===app.session.get('user').get('url')){
-                  app.session.get('own_items').add(item);
-                }
-              });
-            }
-            return {
-              items: app.items.sort() || null,
-              categories: app.categories || null,
-              messages: app.messages || null,
-              users: app.users || null,
-              owner: app.session.get('user') || null
+              demos: app.demos.sort() || null,
+              i18n: app.session.get('i18n'),
+              authenticated: app.session.authenticated()
             };
         },
         renderAddForm: function (event) {
@@ -325,7 +288,7 @@
         },
         loginSuccess: function (data) {
             app.session.save(data.token);
-            window.location = '/static/index.html';
+            window.location = '/';
         },
         getContext: function (data) {
             return {i18n: app.session.get('i18n')};
@@ -335,30 +298,27 @@
     var HeaderView = TemplateView.extend({
         tagName: 'nav',
         id: 'myNavbar',
-        className: 'navbar navbar-default navbar inverse navbar-fixed-top',
+        className: 'navbar navbar-default navbar inverse',
         templateName: '#header-template',
         events: {
-            'click a.logout': 'logout'
-        },
-        initialize: function(options){
-          var self = this;
-          TemplateView.prototype.initialize.apply(this, arguments);
-          if (app.session.get('user')!==null){
-            app.session.get('user').fetch({
-              success: $.proxy(self.render, self)
-            });
-          }
+            'click a.logout': 'logout',
+            'click button.nl': 'nl',
+            'click button.en': 'en'
         },
         getContext: function () {
-            var username = null;
-            if (app.session.get('user')!==null){
-              username = app.session.get('user').get('username');
-            };
-            return {authenticated: app.session.authenticated(), username: username, i18n: app.session.get('i18n')};
+            return {authenticated: app.session.authenticated(), i18n: app.session.get('i18n')};
         },
         logout: function (event) {
             event.preventDefault();
             app.session.delete();
+            window.location = '/';
+        },
+        nl: function () {
+            localStorage.language = 'nl';
+            window.location = '/';
+        },
+        en: function () {
+            localStorage.language = 'en';
             window.location = '/';
         }
     });
@@ -374,6 +334,13 @@
     var AboutView = TemplateView.extend({
       tagName: 'about',
       templateName: '#about-template',
+      initialize: function(options){
+        if (document.getElementById("navbarCollapse").getAttribute('aria-expanded')){
+          $('#navbarCollapse').collapse('toggle');
+        }
+        var self = this;
+        TemplateView.prototype.initialize.apply(this, arguments);
+      },
       getContext: function () {
         return {i18n: app.session.get('i18n')}
       }
@@ -420,16 +387,15 @@
               success: $.proxy(self.render, self)
             });
             app.session.set('item', this.item);
-            app.collections.ready.done(function() {
-              app.categories.fetch({
-                  success: $.proxy(self.render, self)
-              });
-              app.users.fetch({
-                  success: $.proxy(self.render, self)
-              })
-              app.messages.fetch({
-                  success: $.proxy(self.render, self)
-              })
+            app.categories.fetch({
+              success: $.proxy(self.render, self)
+            });
+            app.users.fetch({
+              success: $.proxy(self.render, self)
+            });
+            app.messages.fetch({
+              data: {item: this.item.id},
+              success: $.proxy(self.render, self)
             });
         },
         getContext: function () {
@@ -437,22 +403,18 @@
             var date = new Date(this.item.get('creationdate'));
             var text = ('0'+date.getDate()).slice(-2)+'-'+('0'+(date.getMonth()+1)).slice(-2)+'-'+date.getFullYear();
             this.item.set('date', text);
-            var messages = new app.collections.Messages();
             _.each(app.messages.models, function (message) {
-              if ( url === message.get('item')) {
-                messages.add(message);
-                var date = new Date(message.get('creationdate'));
-                var text = '('+('0'+date.getDate()).slice(-2)+'-'+('0'+(date.getMonth()+1)).slice(-2)+'-'+date.getFullYear()+' '+('0'+date.getHours()).slice(-2)+':'+('0'+date.getMinutes()).slice(-2)+') ';
-                _.each(app.users.models, function (user) {
-                  if (user.get('url') === message.get('owner')) {
-                    text += '<strong>'+user.get('username')+'</strong>: ';
-                  }
-                });
-                text += message.get('text');
-                message.set('full_text', text);
-              }
+              var date = new Date(message.get('creationdate'));
+              var text = '('+('0'+date.getDate()).slice(-2)+'-'+('0'+(date.getMonth()+1)).slice(-2)+'-'+date.getFullYear()+' '+('0'+date.getHours()).slice(-2)+':'+('0'+date.getMinutes()).slice(-2)+') ';
+              _.each(app.users.models, function (user) {
+                if (user.get('url') === message.get('owner')) {
+                  text += '<strong>'+user.get('username')+'</strong>: ';
+                }
+              });
+              text += message.get('text');
+              message.set('full_text', text);
             });
-            return {item: this.item, messages: messages, users: app.users, i18n: app.session.get('i18n')};
+            return {item: this.item, messages: app.messages, users: app.users, i18n: app.session.get('i18n')};
         },
         render: function () {
             TemplateView.prototype.render.apply(this, arguments);
@@ -476,8 +438,10 @@
     app.views.HeaderView = HeaderView;
     app.views.ItemView = ItemView;
     app.views.SettingsView = SettingsView;
-    app.views.MysiteView = MysiteView;
+    app.views.NewUserView = NewUserView;
     app.views.EditView = EditView;
     app.views.AboutView = AboutView;
     app.views.FooterView = FooterView;
+    app.views.PasswordView = ResetPasswordView;
+    app.views.SecondView = SecondView;
 })(jQuery, Backbone, _, app);
