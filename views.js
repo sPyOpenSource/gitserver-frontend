@@ -83,6 +83,13 @@
     var NewMessageView = FormView.extend({
         templateName: '#new-message-template',
         className: 'new-message',
+        initialize: function (options){
+          var self = this;
+          FormView.prototype.initialize.apply(this, arguments);
+          app.session.get('user').fetch({
+            success: $.proxy(self.render, self)
+          });
+        },
         submit: function (event) {
             var self = this,
                 attributes = {};
@@ -162,7 +169,7 @@
           this.render();
         },
         render: function(){
-          var template = _.template('<script>$("#test").fadeOut(3000);</script><div id="test" class="alert alert-success"><strong>Success!</strong> This alert box could indicate a successful or positive action.</div>');
+          var template = _.template('<script>$("#test").fadeOut(3000);</script><div id="test" class="alert alert-success"><strong>Success!</strong> A user is successful created.</div>');
           this.$el.html(template);
         }
     });
@@ -198,7 +205,7 @@
             $('#navbarCollapse').collapse('toggle');
           }
           var self = this;
-          TemplateView.prototype.initialize.apply(this, arguments);
+          FormView.prototype.initialize.apply(this, arguments);
           app.session.get('user').fetch({
             success: $.proxy(self.render, self)
           });

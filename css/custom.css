@@ -434,7 +434,7 @@ section img {
 footer {
   background-color:rgb(33, 45, 121);
   color: #fff;
-  padding: 2em 0 3em;
+  padding: 2em 0 2em;
 }
 
 footer a {
@@ -1104,7 +1104,21 @@ form.posting {
 
 .navbar-brand{width:150px;height:45px;overflow:hidden;display:block;background-size:150px 45px;background-repeat:no-repeat;text-indent:-1000px;background-image:url("/static/media/logo-refugive.svg");-webkit-transition: all 0.2s ease;-moz-transition: all 0.2s ease;-ms-transition: all 0.2s ease;-o-transition: all 0.2s ease;transition: all 0.2s ease;}
 
-.intro{margin:0 -1000px;}
+/*.intro{margin:0 -1000px;}*/
+
+.navbar-header button.lang{
+  overflow: hidden;
+  background-size: 24px 16px;
+  background-repeat: no-repeat;
+  text-indent: -1000px;
+  width:26px;
+  height:18px;
+  border: none;
+  margin:20px 5px 0;
+}
+
+.navbar-header button.nl{background-image:url(/static/media/lang_nl.png);}
+.navbar-header button.en{background-image:url(/static/media/lang_en.png);}
 
 @media only screen and (max-width: 35em) {
 	.navbar-brand{width:75px;height:29px;background-size:50px 15px;background-position:25px 14px;}
@@ -1116,18 +1130,18 @@ form.posting {
 
 @media(max-width:767px){
   .container-fluid{width:95%;margin:0px auto 10px;}
-  .intro p,.intro h1{width:500px;margin:5px auto;display:block;}
+  /*.intro p,.intro h1{width:500px;margin:5px auto;display:block;}*/
 }
 
 @media(min-width:768px) and (max-width:979px){
   .container-fluid{width:750px;margin:0px auto 10px;}
-  .intro p,.intro h1{width:750px;margin:10px auto;display:block;}
+  /*.intro p,.intro h1{width:750px;margin:10px auto;display:block;}*/
 }
 @media(min-width:992px){
   .container-fluid{width:970px;margin:0px auto 10px;}
-  .intro p,.intro h1{width:970px;margin:15px auto;display:block;}
+  /*.intro p,.intro h1{width:970px;margin:15px auto;display:block;}*/
 }
 @media(min-width:1200px){
   .container-fluid{width:1170px;margin:0px auto 10px;}
-  .intro p,.intro h1{width:1170px;margin:15px auto;display:block;}
+  /*.intro p,.intro h1{width:1170px;margin:15px auto;display:block;}*/
 }

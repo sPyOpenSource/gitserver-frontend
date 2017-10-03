@@ -46,40 +46,52 @@
 
         <script type="text/html" id="home-template">
           <div class="intro">
+            <div class="wrap">
+              <p>
+                <%=i18n.T('A refugee may need something.')%>
+                <%=i18n.T('A local may have a spare item.')%>
+                <%=i18n.T('You can use this website to get in touch with each other.')%>
+              </p>
+            </div>
+          </div>
+          <div class="wrap">
+            <% if (authenticated) { %>
+              <br>
+              <button class="add btn btn-default"><%=i18n.T('Add An Item')%></button>
+            <% } %>
+            <% if (demos !== null) { %>
+              <div class="items">
+                <% _.each(demos.models, function (item) { %>
+                  <hr>
+                  <div class="factwrap">
+                    <a href="#item/<%- item.get('id') %>">
+                      <h3 dir="ltr" style="color:hsl(358,70%,56%)"><%=item.get('title')%></h3>
+                    </a>
+                    <% if (item.get('image') !== '') { %>
+                      <div class="imgwrap">
+                        <img src="https://res.cloudinary.com/dvrrqjzay/image/upload/c_fill,h_300,w_400/<%=item.get('image')%>.jpg">
+                      </div>
+                    <% } %>
+                    <div class="factoids">
+                      <%=i18n.T('Category')%>
+                      <strong><%=i18n.T(item.get('category'))%></strong>
+                    </div>
+                  </div>
+                <% }); %>
+              </div>
+            <% } %>
+          </div>
+        </script>
+
+        <script type="text/html" id="login-template">
+          <div class="intro">
             <p>
               <%=i18n.T('A refugee may need something.')%>
               <%=i18n.T('A local may have a spare item.')%>
               <%=i18n.T('You can use this website to get in touch with each other.')%>
             </p>
           </div>
-          <% if (authenticated) { %>
-            <br>
-            <button class="add btn btn-default"><%=i18n.T('Add An Item')%></button>
-          <% } %>
-          <% if (demos !== null) { %>
-            <div class="items">
-              <% _.each(demos.models, function (item) { %>
-                <hr>
-                <div class="factwrap">
-                  <a href="#item/<%- item.get('id') %>">
-                    <h3 dir="ltr" style="color:hsl(358,70%,56%)"><%=item.get('title')%></h3>
-                  </a>
-                  <% if (item.get('image') !== '') { %>
-                    <div class="imgwrap">
-                      <img src="https://res.cloudinary.com/dvrrqjzay/image/upload/c_fill,h_300,w_400/<%=item.get('image')%>.jpg">
-                    </div>
-                  <% } %>
-                  <div class="factoids">
-                    <%=i18n.T('Category')%>
-                    <strong><%=i18n.T(item.get('category'))%></strong>
-                  </div>
-                </div>
-              <% }); %>
-            </div>
-          <% } %>
-        </script>
-
-        <script type="text/html" id="login-template">
+          <br>
           <form action="" method="post">
             <label for="id_email"><%=i18n.T('E-mail')%>:</label>
             <input id="id_email" type="text" name="email" pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" required />
@@ -118,8 +130,8 @@
                 <span class="icon-bar"></span>
               </button>
               <a class="navbar-brand" href="#">Refugive.com</a>
-              <button class="nl">NL</button>
-              <button class="en">EN</button>
+              <button class="lang nl">NL</button>
+              <button class="lang en">EN</button>
             </div>
             <div class="collapse navbar-collapse" id="navbarCollapse">
               <ul class="nav navbar-nav">
@@ -137,13 +149,10 @@
         </script>
 
         <script type="text/html" id="footer-template">
-          <div class="container-fluid">
-            <div class="opm">
-              <p><%=i18n.T('What is Refugive.com and how does it work?')%> <a href="#/about"><%=i18n.T('About us')%></a></p>
-              <div>
+          <div class="wrap">
+              <p><%=i18n.T('What is Refugive.com and how does it work?')%> <a href="#/about"><%=i18n.T('About us')%></a><br/>
                 <%=i18n.T('Tips, suggestions, complaints or questions?')%> <%=i18n.T('Please')%> <a href="https://docs.google.com/forms/d/1i1wh3T_YJY1ts8wx7yeRCALiPjtDDbrabWn5tuvx1Xg/viewform"><%=i18n.T('give us feedback')%></a>
-              </div>
-            </div>
+              </p>
           </div>
         </script>
 
@@ -184,6 +193,7 @@
             <br>
             <button type="submit" class="btn btn-dafault"><%=i18n.T('Save')%></button>
           </form>
+          <br>
         </script>
 
         <script type="text/html" id="new-user-template">
@@ -311,7 +321,7 @@
     </head>
     <body>
       <div class="container-fluid" id="message"></div>
-      <div class="container-fluid" id="content"></div>
+      <section id="content"></section>
       <script src="vendor/underscore.js"></script>
       <script src="vendor/backbone.js"></script>
       <script id="config" type="text/json">
