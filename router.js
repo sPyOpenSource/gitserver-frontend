@@ -4,10 +4,8 @@
             '': 'home',
             'item/:id': 'item',
             'edit/:id': 'edit',
-            'settings': 'settings',
             'help': 'help',
             'about': 'about',
-            'user': 'user',
             'password/:key': 'password',
             'login': 'login',
             'success': 'success'
@@ -32,10 +30,6 @@
             var view = new app.views.HomepageView({el: this.contentElement});
             this.render(view);
         },
-        items: function () {
-            var view = new app.views.MysiteView({el: this.contentElement});
-            this.render(view);
-        },
         item: function (id) {
             var view = new app.views.ItemView({
                 el: this.contentElement,
@@ -57,20 +51,12 @@
             });
             this.render(view);
         },
-        settings: function(){
-            var view = new app.views.SettingsView({el: this.contentElement});
-            this.render(view);
-        },
         help: function(){
             var view = new app.views.HelpView({el: this.contentElement});
             this.render(view);
         },
         about: function(){
             var view = new app.views.AboutView({el: this.contentElement});
-            this.render(view);
-        },
-        user: function(){
-            var view = new app.views.NewUserView({el: this.contentElement});
             this.render(view);
         },
         success: function(){
@@ -84,7 +70,7 @@
             callback = callback || this[name];
             callback = _.wrap(callback, function (original) {
                 var args = _.without(arguments, original);
-                if (app.session.authenticated() || -1 !== $.inArray(name, ['about', 'help', 'user', 'password', 'home', 'success'])) {
+                if (app.session.authenticated() || -1 !== $.inArray(name, ['about', 'help', 'password', 'home', 'success'])) {
                     original.apply(this, args);
                 } else {
                     // Show the login screen before calling the view

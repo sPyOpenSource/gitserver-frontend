@@ -124,43 +124,13 @@
           this.csrf_token.fetch({
             success: $.proxy(self.render, self)
           });
-          app.categories.fetch({
-            success: $.proxy(self.render, self)
-          });
         },
         getContext: function () {
           return {
             owner: app.session.get('user'),
-            categories: app.categories || null,
             csrf_token: this.csrf_token,
             i18n: app.session.get('i18n')
           };
-        }
-    });
-
-    var NewUserView = ServerFormView.extend({
-        templateName: '#new-user-template',
-        className: 'new-user',
-        initialize: function (options){
-          if (document.getElementById("navbarCollapse").getAttribute('aria-expanded')){
-            $('#navbarCollapse').collapse('toggle');
-          }
-          var self = this;
-          TemplateView.prototype.initialize.apply(this, arguments);
-          this.csrf_token = new app.models.csrf_token();
-          this.csrf_token.fetch({
-            success: $.proxy(self.render, self)
-          });
-          app.groups.fetch({
-            success: $.proxy(self.render, self)
-          });
-        },
-        getContext: function () {
-            return {
-              groups: app.groups || null,
-              csrf_token: this.csrf_token,
-              i18n: app.session.get('i18n')
-            };
         }
     });
 
@@ -169,7 +139,9 @@
           this.render();
         },
         render: function(){
-          var template = _.template('<script>$("#test").fadeOut(3000);</script><div id="test" class="alert alert-success"><strong>Success!</strong> A user is successful created.</div>');
+          var template = _.template(
+            '<script>$("#message").fadeOut(3000);</script><div id="message" class="alert alert-success"><strong>Success!</strong> New user is successfully created.</div>'
+          );
           this.$el.html(template);
         }
     });
@@ -178,7 +150,7 @@
         templateName: '#password-template',
         className: 'reset-password',
         initialize: function (options){
-          if (document.getElementById("navbarCollapse").getAttribute('aria-expanded')){
+          if (document.getElementById("navbarCollapse").getAttribute('aria-expanded')==="true"){
             $('#navbarCollapse').collapse('toggle');
           }
           var self = this;
@@ -201,15 +173,9 @@
     var SettingsView = FormView.extend({
         templateName: '#settings-template',
         initialize: function (options){
-          if (document.getElementById("navbarCollapse").getAttribute('aria-expanded')){
-            $('#navbarCollapse').collapse('toggle');
-          }
           var self = this;
           FormView.prototype.initialize.apply(this, arguments);
           app.session.get('user').fetch({
-            success: $.proxy(self.render, self)
-          });
-          app.groups.fetch({
             success: $.proxy(self.render, self)
           });
         },
@@ -222,7 +188,7 @@
             app.session.get('user').save();
         },
         getContext: function () {
-            return {groups: app.groups || null, user: app.session.get('user'), i18n: app.session.get('i18n')};
+            return {user: app.session.get('user'), i18n: app.session.get('i18n')};
         },
         success: function (model) {
             this.done();
@@ -232,15 +198,29 @@
 
     var HelpView = TemplateView.extend({
         templateName: '#help-template',
+        events: {
+            'click button.settings': 'renderAddForm'
+        },
         initialize: function (options){
-          if (document.getElementById("navbarCollapse").getAttribute('aria-expanded')){
+          if (document.getElementById("navbarCollapse").getAttribute('aria-expanded')==="true"){
             $('#navbarCollapse').collapse('toggle');
           }
           var self = this;
           TemplateView.prototype.initialize.apply(this, arguments);
         },
         getContext: function () {
-            return {i18n: app.session.get('i18n')};
+            return {i18n: app.session.get('i18n'), authenticated: app.session.authenticated()};
+        },
+        renderAddForm: function (event) {
+            var view = new SettingsView(),
+                link = $(event.currentTarget);
+            event.preventDefault();
+            link.before(view.el);
+            link.hide();
+            view.render();
+            view.on('done', function () {
+                link.show();
+            });
         }
     });
 
@@ -250,18 +230,18 @@
             'click button.add': 'renderAddForm'
         },
         initialize: function (options) {
-          if (document.getElementById("navbarCollapse").getAttribute('aria-expanded')){
+          if (document.getElementById("navbarCollapse").getAttribute('aria-expanded')==="true"){
             $('#navbarCollapse').collapse('toggle');
           }
           var self = this;
           TemplateView.prototype.initialize.apply(this, arguments);
-            app.demos.fetch({
+            app.items.fetch({
               success: $.proxy(self.render, self)
             });
         },
         getContext: function () {
             return {
-              demos: app.demos.sort() || null,
+              items: app.items.sort() || null,
               i18n: app.session.get('i18n'),
               authenticated: app.session.authenticated()
             };
@@ -282,7 +262,7 @@
     var LoginView = FormView.extend({
         templateName: '#login-template',
         initialize: function(options){
-          if (document.getElementById("navbarCollapse").getAttribute('aria-expanded')){
+          if (document.getElementById("navbarCollapse").getAttribute('aria-expanded')==="true"){
             $('#navbarCollapse').collapse('toggle');
           }
           var self = this;
@@ -294,11 +274,19 @@
             data = this.serializeForm(this.form);
             $.post(app.apiLogin, data)
                 .done($.proxy(this.loginSuccess, this))
-                .fail($.proxy(this.failure, this));
+                .fail($.proxy(this.addUser, this));
         },
         loginSuccess: function (data) {
             app.session.save(data.token);
             window.location = '/';
+        },
+        addUser: function (data) {
+            $.post('/api/adduser', this.serializeForm(this.form))
+              .done($.proxy(this.success, this))
+              .fail($.proxy(this.failure, this));
+        },
+        success: function (data) {
+            window.location = '/static/index.html#/success';
         },
         getContext: function (data) {
             return {i18n: app.session.get('i18n')};
@@ -311,9 +299,7 @@
         className: 'navbar navbar-default navbar inverse',
         templateName: '#header-template',
         events: {
-            'click a.logout': 'logout',
-            'click button.nl': 'nl',
-            'click button.en': 'en'
+            'click a.logout': 'logout'
         },
         getContext: function () {
             return {authenticated: app.session.authenticated(), i18n: app.session.get('i18n')};
@@ -321,14 +307,6 @@
         logout: function (event) {
             event.preventDefault();
             app.session.delete();
-            window.location = '/';
-        },
-        nl: function () {
-            localStorage.language = 'nl';
-            window.location = '/';
-        },
-        en: function () {
-            localStorage.language = 'en';
             window.location = '/';
         }
     });
@@ -345,7 +323,7 @@
       tagName: 'about',
       templateName: '#about-template',
       initialize: function(options){
-        if (document.getElementById("navbarCollapse").getAttribute('aria-expanded')){
+        if (document.getElementById("navbarCollapse").getAttribute('aria-expanded')==="true"){
           $('#navbarCollapse').collapse('toggle');
         }
         var self = this;
@@ -360,14 +338,9 @@
         templateName: '#edit-template',
         initialize: function (options) {
             var self = this;
-            TemplateView.prototype.initialize.apply(this, arguments);
+            FormView.prototype.initialize.apply(this, arguments);
             this.item = new app.models.Item({id: options.itemId});
             this.item.fetch();
-            app.collections.ready.done(function() {
-              app.categories.fetch({
-                  success: $.proxy(self.render, self)
-              });
-            });
         },
         submit: function (event) {
             FormView.prototype.submit.apply(this, arguments);
@@ -377,10 +350,10 @@
             window.location = '/';
         },
         getContext: function () {
-            return {item: this.item, categories: app.categories};
+            return {item: this.item};
         },
         render: function () {
-            TemplateView.prototype.render.apply(this, arguments);
+            FormView.prototype.render.apply(this, arguments);
         },
     });
 
@@ -397,9 +370,6 @@
               success: $.proxy(self.render, self)
             });
             app.session.set('item', this.item);
-            app.categories.fetch({
-              success: $.proxy(self.render, self)
-            });
             app.users.fetch({
               success: $.proxy(self.render, self)
             });
@@ -409,19 +379,14 @@
             });
         },
         getContext: function () {
-            var url = 'http://localhost:8000/api/items/'+this.item.get('id');
-            var date = new Date(this.item.get('creationdate'));
-            var text = ('0'+date.getDate()).slice(-2)+'-'+('0'+(date.getMonth()+1)).slice(-2)+'-'+date.getFullYear();
-            this.item.set('date', text);
             _.each(app.messages.models, function (message) {
-              var date = new Date(message.get('creationdate'));
-              var text = '('+('0'+date.getDate()).slice(-2)+'-'+('0'+(date.getMonth()+1)).slice(-2)+'-'+date.getFullYear()+' '+('0'+date.getHours()).slice(-2)+':'+('0'+date.getMinutes()).slice(-2)+') ';
+              var text = '('+message.getDatetime()+') ';
               _.each(app.users.models, function (user) {
                 if (user.get('url') === message.get('owner')) {
-                  text += '<strong>'+user.get('username')+'</strong>: ';
+                  text += '<strong>'+_.escape(user.get('username'))+'</strong>: ';
                 }
               });
-              text += message.get('text');
+              text += _.escape(message.get('text'));
               message.set('full_text', text);
             });
             return {item: this.item, messages: app.messages, users: app.users, i18n: app.session.get('i18n')};
@@ -447,8 +412,6 @@
     app.views.LoginView = LoginView;
     app.views.HeaderView = HeaderView;
     app.views.ItemView = ItemView;
-    app.views.SettingsView = SettingsView;
-    app.views.NewUserView = NewUserView;
     app.views.EditView = EditView;
     app.views.AboutView = AboutView;
     app.views.FooterView = FooterView;

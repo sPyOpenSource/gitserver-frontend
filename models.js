@@ -47,8 +47,7 @@
     });
 
     app.models.User = BaseModel.extend({
-        urlRoot: '/api/users',
-        idAttributemodel: 'username'
+        urlRoot: '/api/users'
     });
 
     app.models.i18n = BaseModel.extend({
@@ -201,51 +200,31 @@
 
     app.session = new Session();
 
-    app.models.Category = BaseModel.extend({
-        urlRoot: '/api/categories'
-    });
-
     app.models.csrf_token = BaseModel.extend({
-        urlRoot: '/api/image'
+        urlRoot: '/api/csrf_token'
     });
 
     app.models.Item = BaseModel.extend({
-        urlRoot: '/api/items'
+        urlRoot: '/api/items',
+        getDate: function() {
+          var date = new Date(this.get('creationdate'));
+          return ('0'+date.getDate()).slice(-2)+'-'+('0'+(date.getMonth()+1)).slice(-2)+'-'+date.getFullYear();
+        }
     });
-
-    app.models.Group = BaseModel.extend({
-        urlRoot: '/api/groups'
-    });
-
-    app.models.Dialogue = BaseModel.extend({
-        urlRoot: '/api/dialogues'
-    })
 
     app.models.Message = BaseModel.extend({
-        urlRoot: '/api/messages'
+        urlRoot: '/api/messages',
+        getDatetime: function() {
+          var date = new Date(this.get('creationdate'));
+          return ('0'+date.getDate()).slice(-2)+'-'+('0'+(date.getMonth()+1)).slice(-2)+'-'+date.getFullYear()+' '+('0'+date.getHours()).slice(-2)+':'+('0'+date.getMinutes()).slice(-2);
+        }
     })
-
-    app.models.Demo = BaseModel.extend({
-        urlRoot: '/api/demos'
-    })
-
-    app.collections.Dialogues = Backbone.Collection.extend({
-        model: app.models.Dialogue,
-        url: '/api/dialogues'
-    })
-    app.dialogues = new app.collections.Dialogues();
 
     app.collections.Messages = Backbone.Collection.extend({
         model: app.models.Message,
         url: '/api/messages'
     })
     app.messages = new app.collections.Messages();
-
-    app.collections.Categories = Backbone.Collection.extend({
-        model: app.models.Category,
-        url: '/api/categories'
-    });
-    app.categories = new app.collections.Categories();
 
     app.collections.Items = Backbone.Collection.extend({
         model: app.models.Item,
@@ -262,20 +241,4 @@
         url: '/api/users'
     });
     app.users = new app.collections.Users();
-
-    app.collections.Groups = Backbone.Collection.extend({
-        model: app.models.Group,
-        url: '/api/groups'
-    });
-    app.groups = new app.collections.Groups();
-
-    app.collections.Demos = Backbone.Collection.extend({
-        model: app.models.Demo,
-        url: '/api/demos',
-        comparator: function(m) {
-          var date = new Date(m.get('creationdate'));
-          return -date.getTime();
-        }
-    });
-    app.demos = new app.collections.Demos();
 })(jQuery, Backbone, _, app);
