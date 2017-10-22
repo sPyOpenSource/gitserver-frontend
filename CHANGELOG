@@ -1,3 +1,11 @@
+v1.10 XW 22-10-2017
+changed: items ordered by title
+fixed: after login redirect to /git/index.html
+removed: router login
+changed: language to en only
+added: html tags
+changed: info from refugive to git server
+
 v1.9 XW 13-10-2017
 removed: categories and groups
 removed: custum CSS

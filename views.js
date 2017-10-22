@@ -242,8 +242,7 @@
         getContext: function () {
             return {
               items: app.items.sort() || null,
-              i18n: app.session.get('i18n'),
-              authenticated: app.session.authenticated()
+              i18n: app.session.get('i18n')
             };
         },
         renderAddForm: function (event) {
@@ -278,7 +277,7 @@
         },
         loginSuccess: function (data) {
             app.session.save(data.token);
-            window.location = '/';
+            window.location = '/git/index.html';
         },
         addUser: function (data) {
             $.post('/api/adduser', this.serializeForm(this.form))

@@ -7,7 +7,6 @@
             'help': 'help',
             'about': 'about',
             'password/:key': 'password',
-            'login': 'login',
             'success': 'success'
         },
         initialize: function (options) {
@@ -23,10 +22,6 @@
             Backbone.history.start();
         },
         home: function () {
-            var view = new app.views.HomepageView({el: this.contentElement});
-            this.render(view);
-        },
-        login: function(){
             var view = new app.views.HomepageView({el: this.contentElement});
             this.render(view);
         },
@@ -70,7 +65,7 @@
             callback = callback || this[name];
             callback = _.wrap(callback, function (original) {
                 var args = _.without(arguments, original);
-                if (app.session.authenticated() || -1 !== $.inArray(name, ['about', 'help', 'password', 'home', 'success'])) {
+                if (app.session.authenticated() || -1 !== $.inArray(name, ['about', 'help', 'password', 'success'])) {
                     original.apply(this, args);
                 } else {
                     // Show the login screen before calling the view

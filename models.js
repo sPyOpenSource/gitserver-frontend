@@ -121,6 +121,7 @@
           }
         },
         getLanguage: function () {
+          return 'en';
             var lang = localStorage.language;
             if(lang){
               return lang;
@@ -229,9 +230,10 @@
     app.collections.Items = Backbone.Collection.extend({
         model: app.models.Item,
         url: '/api/items',
-        comparator: function(m) {
-          var date = new Date(m.get('creationdate'));
-          return -date.getTime();
+        comparator: function(itemA, itemB) {
+          if (itemA.get('title') > itemB.get('title')) return 1;
+          if (itemB.get('title') > itemA.get('title')) return -1;
+          return 0; // equal
         }
     });
     app.items = new app.collections.Items();

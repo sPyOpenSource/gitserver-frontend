@@ -1,81 +1,54 @@
 <!DOCTYPE html>
-<html class="no-js">
+<html class="no-js" lang="en">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Refugive.com</title>
-        <meta name="description" content="A refugee may need something. A local might have a spare item. Use this website to get in touch.">
+        <title>Git Server</title>
+        <meta name="description" content="This is a Git Repositories Server.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="/static/css/bootstrap.css">
-        <script src="/static/vendor/jquery.js"></script>
-        <script src="/static/bootstrap.js"></script>
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <script src="vendor/jquery.js"></script>
+        <script src="bootstrap.js"></script>
         <script type="text/html" id="about-template">
           <div class="intro">
-              <h1>Refugive.com: <%=i18n.T('a marketplace for refugees and neighbours')%></h1>
+              <h1>Git Server: <%=i18n.T('a place for programmers')%></h1>
           </div>
           <div class="main itempage">
-                <p>
-                  <%=i18n.T('Refugive.com is a website created and used by the people from the neighbourhood.')%>
-                  <%=i18n.T('This site is created to match the wishes of refugees to the openheartness from the locals.')%>
-                  <%=i18n.T('You may found clothes, books, games etc.')%>
-                  <%=i18n.T('For examples: how about cooking a meal or doing sports together?')%>
-                </p>
-                <p>
-                  <%=i18n.T('Do you need something (as a refugee) or you have clothes spare (as a local)?')%>
-                  <%=i18n.T('Take a look on Refugive.com and meet your new neighbours from there!')%>
-                  <%=i18n.T('If you are a refugee, then it is for you free to advertise your needs and wishes on it.')%>
-                  <%=i18n.T('It is also free for the locals, but offers should be made within a walking distance from the refugee center.')%>
-                  <%=i18n.T('No money should be traded for exhange the goods.')%>
-                </p>
-                <p>
-                  <%=i18n.T('Refugive.com was started by a group of people in Bezuidenhout (The Hague) in order to help refugees from their neighbourhood.')%>
-                  <%=i18n.T('Refugive.com is a non-profit website.')%>
-                </p>
-                <p>
-                  <%=i18n.T('Best regards,')%><br>Jasper, Jeroen, Krista, Maaike <%=i18n.T('and')%> Tijs
-                </p>
+              <p>
+                <%=i18n.T('Git Server is a website created and used by the programmers.')%>
+                <%=i18n.T('This site is created to match the wishes of programmers.')%>
+                <%=i18n.T('Take a look on Git Server and meet programmers over there!')%>
+                <%=i18n.T('Git Server is started by me.')%>
+                <%=i18n.T('Git Server is a non-profit website.')%>
+              </p>
+              <p>
+                <%=i18n.T('Best regards,')%><br>Xuyi
+              </p>
           </div>
         </script>
 
         <script type="text/html" id="home-template">
           <div class="intro">
-              <p>
-                <%=i18n.T('A refugee may need something.')%>
-                <%=i18n.T('A local may have a spare item.')%>
-                <%=i18n.T('You can use this website to get in touch with each other.')%>
-              </p>
+            <p>
+              <%=i18n.T('You can use this website to get in touch with other programmers.')%>
+            </p>
           </div>
-            <% if (authenticated) { %>
-              <br>
-              <button class="add btn btn-default"><%=i18n.T('Add An Project')%></button>
-            <% } %>
-            <% if (items !== null) { %>
-              <div class="items">
-                <% _.each(items.models, function (item) { %>
-                  <hr>
-                  <div class="factwrap">
-                    <a href="#item/<%- item.get('id') %>">
-                      <h3 dir="ltr"><%=item.get('title')%></h3>
-                    </a>
-                    <% if (item.get('image') !== '') { %>
-                      <div class="imgwrap">
-                        <img src="https://res.cloudinary.com/dvrrqjzay/image/upload/c_fill,h_300,w_400/<%=item.get('image')%>.jpg">
-                      </div>
-                    <% } %>
-                  </div>
-                <% }); %>
-              </div>
-            <% } %>
+          <button class="add btn btn-default"><%=i18n.T('Add An Topic')%></button>
+          <% if (items !== null) { %>
+            <div class="items">
+              <% _.each(items.models, function (item) { %>
+                <hr>
+                <div class="factwrap">
+                  <a href="#item/<%- item.get('id') %>">
+                    <h3 dir="ltr"><%=item.get('title')%></h3>
+                  </a>
+                </div>
+              <% }); %>
+            </div>
+          <% } %>
         </script>
 
         <script type="text/html" id="login-template">
-          <div class="intro">
-              <p>
-                <%=i18n.T('A refugee may need something.')%>
-                <%=i18n.T('A local may have a spare item.')%>
-                <%=i18n.T('You can use this website to get in touch with each other.')%>
-              </p>
-          </div>
             <form action="" method="post">
               <label for="id_email"><%=i18n.T('E-mail')%>:</label>
               <input class="form-control" id="id_email" type="text" name="email" pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" required />
@@ -113,17 +86,16 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="#">Git</a>
+              <a class="navbar-brand" href="#">Git Server</a>
             </div>
             <div class="collapse navbar-collapse" id="navbarCollapse">
               <ul class="nav navbar-nav">
                 <li><a href="#/help"><%=i18n.T('Help')%></a></li>
                 <% if (authenticated) { %>
-                  <li><a href="#">Activities</a></li>
                   <li><a href="#">Milestones</a></li>
                   <li><a href="#" class="logout"><%=i18n.T('Logout')%></a></li>
                 <% } else { %>
-                  <li><a href="#/login"><%=i18n.T('Login')%></a></li>
+                  <li><a href="#"><%=i18n.T('Login')%></a></li>
                 <% } %>
               </ul>
             </div>
@@ -133,7 +105,7 @@
         <script type="text/html" id="footer-template">
           <hr>
           <div class="container">
-              <p><%=i18n.T('What is Refugive.com and how does it work?')%> <a href="#/about"><%=i18n.T('About us')%></a><br/>
+              <p><%=i18n.T('What is Git Server and how does it work?')%> <a href="#/about"><%=i18n.T('About us')%></a><br/>
                 <%=i18n.T('Tips, suggestions, complaints or questions?')%> <%=i18n.T('Please')%> <a href="mailto:xuyi_wang@hotmail.com"><%=i18n.T('give us feedback')%></a>
               </p>
           </div>
@@ -141,19 +113,19 @@
 
         <script type="text/html" id="help-template">
           <% if (authenticated) { %>
-          <button class="settings btn btn-default"><%=i18n.T('Settings')%></button>
+            <button class="settings btn btn-default"><%=i18n.T('Settings')%></button>
           <% } %>
           <div class="intro">
-              <h1><%=i18n.T('Q & A')%></h1>
+            <h1><%=i18n.T('Q & A')%></h1>
           </div>
-            <strong><p><%=i18n.T('How can I create an account?')%></p></strong>
-            <p><%=i18n.T('You can create an account by clicking on Register.')%></p>
-            <strong><p><%=i18n.T('How can I add an item?')%></p></strong>
-            <p><%=i18n.T('You can add an item by clicking on Add An Item button.')%></p>
-            <strong><p><%=i18n.T('How can I change my personal information?')%></p></strong>
-            <p><%=i18n.T('You can change your information by click on Settings tab.')%></p>
-            <strong><p><%=i18n.T('How can I react on an item?')%></p></strong>
-            <p><%=i18n.T('You can react on an item by clicking on Reply button after clicking on the item.')%></p>
+          <strong><p><%=i18n.T('How can I create an account?')%></p></strong>
+          <p><%=i18n.T('You can create an account by clicking on Register.')%></p>
+          <strong><p><%=i18n.T('How can I add an topic?')%></p></strong>
+          <p><%=i18n.T('You can add an item by clicking on Add An Topic button.')%></p>
+          <strong><p><%=i18n.T('How can I change my personal information?')%></p></strong>
+          <p><%=i18n.T('You can change your information by click on Settings button.')%></p>
+          <strong><p><%=i18n.T('How can I react on an topic?')%></p></strong>
+          <p><%=i18n.T('You can react on an topic by clicking on Reply button after clicking on the topic.')%></p>
         </script>
 
         <script type="text/html" id="settings-template">
@@ -201,30 +173,17 @@
         </script>
 
         <script type="text/html" id="item-template">
-              <h1 dir="ltr"><%=item.get('title')%></h1>
-              <input type="hidden" name="id" value="<%=item.get('id')%>">
-                <% if (item.get('image') !== '') { %>
-                  <img src="https://res.cloudinary.com/dvrrqjzay/image/upload/c_fill,h_300,w_400/<%=item.get('image')%>.jpg">
-                <% } %>
-                  <p class="desc" dir="ltr">
-                    <%=_.escape(item.get('description'))%>
-                  </p>
-                  <% if (users !== null) { %>
-                    <p class="postedby"><%=i18n.T('Offered by')%>
-                      <% _.each(users.models, function(user){ %>
-                        <% if (user.get('url') === item.get('owner')) { %>
-                          <strong><%=_.escape(user.get('username'))%></strong>
-                        <% }; %>
-                      <% }); %>
-                      <%=i18n.T('since')%> <%=item.getDate()%>
-                    </p>
-                  <% } %>
-                  <% _.each(messages.models, function (message) { %>
-                    <p>
-                      <%=message.get('full_text')%>
-                    </p>
-                  <% }); %>
-                  <button class="add btn btn-dafault"><%=i18n.T('Reply')%></button>
+          <h1 dir="ltr"><%=item.get('title')%></h1>
+          <input type="hidden" name="id" value="<%=item.get('id')%>">
+          <p class="desc" dir="ltr">
+            <%=_.escape(item.get('description'))%>
+          </p>
+          <% _.each(messages.models, function (message) { %>
+            <p>
+              <%=message.get('full_text')%>
+            </p>
+          <% }); %>
+          <button class="add btn btn-dafault"><%=i18n.T('Reply')%></button>
         </script>
 
         <script type="text/html" id="edit-template">
@@ -244,7 +203,7 @@
     </head>
     <body>
       <div class="container" id="message"></div>
-      <div id="content" class="container"></div>
+      <main id="content" class="container" role="main"></main>
       <script src="vendor/underscore.js"></script>
       <script src="vendor/backbone.js"></script>
       <script id="config" type="text/json">
