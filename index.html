@@ -10,30 +10,26 @@
         <script src="vendor/jquery.js"></script>
         <script src="bootstrap.js"></script>
         <script type="text/html" id="about-template">
-          <div class="intro">
-              <h1>Git Server: <%=i18n.T('a place for programmers')%></h1>
-          </div>
-          <div class="main itempage">
-              <p>
-                <%=i18n.T('Git Server is a website created and used by the programmers.')%>
-                <%=i18n.T('This site is created to match the wishes of programmers.')%>
-                <%=i18n.T('Take a look on Git Server and meet programmers over there!')%>
-                <%=i18n.T('Git Server is started by me.')%>
-                <%=i18n.T('Git Server is a non-profit website.')%>
-              </p>
-              <p>
-                <%=i18n.T('Best regards,')%><br>Xuyi
-              </p>
-          </div>
+            <p>
+              Dear visitors,
+            </p>
+            <p>
+              Git Server is a place for programmers.
+              <%=i18n.T('It is a website created and used by the programmers.')%>
+              <%=i18n.T('This site is created to match the wishes of programmers.')%>
+              <%=i18n.T('Take a look on Git Server and meet programmers over there!')%>
+              <%=i18n.T('Git Server is a non-profit website.')%>
+            </p>
+            <p>
+              <%=i18n.T('Kind regards,')%><br>Xuyi
+            </p>
         </script>
 
         <script type="text/html" id="home-template">
-          <div class="intro">
-            <p>
-              <%=i18n.T('You can use this website to get in touch with other programmers.')%>
-            </p>
-          </div>
-          <button class="add btn btn-default"><%=i18n.T('Add An Topic')%></button>
+          <p>
+            <%=i18n.T('You can use this website to get in touch with other programmers.')%>
+          </p>
+          <button class="add btn btn-primary"><%=i18n.T('Add An Topic')%></button>
           <% if (items !== null) { %>
             <div class="items">
               <% _.each(items.models, function (item) { %>
@@ -54,7 +50,8 @@
               <input class="form-control" id="id_email" type="text" name="email" pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" required />
               <label for="id_password"><%=i18n.T('Password')%>:</label>
               <input class="form-control" id="id_password" type="password" name="password" required />
-              <button type="submit" class="btn btn-dafault"><%=i18n.T('Submit')%></button>
+              <br>
+              <button type="submit" class="btn btn-primary"><%=i18n.T('Submit')%></button>
               <a href="#/password/reset"><%=i18n.T('I lost my password')%></a>
             </form>
         </script>
@@ -63,17 +60,21 @@
             <form action="/api/resetpassword" method="post">
               <input name="csrfmiddlewaretoken" value="<%=csrf_token.get('csrf_token')%>" type="hidden">
               <% if (key === "reset") { %>
-                <h1><%=i18n.T('So you forgot your password?')%></h1>
-                <p><%=i18n.T('Do not worry!')%> <%=i18n.T('Fill in your email address below and we will send you a link to reset your password.')%></p>
-                <label for="id_email"><%=i18n.T('E-mail')%>:</label>
+                <p>
+                  <%=i18n.T('So you forgot your password?')%>
+                  <%=i18n.T('Fill in your email address below:')%>
+                </p>
                 <input class="form-control" id="id_email" type="text" name="email" pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" required />
               <% } else { %>
                 <input type="hidden" name="key" value="<%=key%>">
-                <h1><%=i18n.T('So you want to change your password?')%></h1>
-                <p><%=i18n.T('Enter your new password here')%>:</p>
+                <p>
+                  <%=i18n.T('So you want to change your password?')%>
+                  <%=i18n.T('Enter your new password here')%>:
+                </p>
                 <input class="form-control" id="id_password" type="password" name="password" required maxlength="50"/>
               <% } %>
-              <button type="submit" class="btn btn-dafault"><%=i18n.T('Submit')%></button>
+              <br>
+              <button type="submit" class="btn btn-primary"><%=i18n.T('Submit')%></button>
             </form>
         </script>
 
@@ -92,7 +93,7 @@
               <ul class="nav navbar-nav">
                 <li><a href="#/help"><%=i18n.T('Help')%></a></li>
                 <% if (authenticated) { %>
-                  <li><a href="#">Milestones</a></li>
+                  <!--li><a href="#">Milestones</a></li-->
                   <li><a href="#" class="logout"><%=i18n.T('Logout')%></a></li>
                 <% } else { %>
                   <li><a href="#"><%=i18n.T('Login')%></a></li>
@@ -105,35 +106,34 @@
         <script type="text/html" id="footer-template">
           <hr>
           <div class="container">
-              <p><%=i18n.T('What is Git Server and how does it work?')%> <a href="#/about"><%=i18n.T('About us')%></a><br/>
-                <%=i18n.T('Tips, suggestions, complaints or questions?')%> <%=i18n.T('Please')%> <a href="mailto:xuyi_wang@hotmail.com"><%=i18n.T('give us feedback')%></a>
-              </p>
+            <p>
+              <%=i18n.T('What is Git Server and how does it work?')%> <a href="#/about"><%=i18n.T('About us')%></a><br/>
+              <%=i18n.T('Tips, suggestions, complaints or questions?')%> <%=i18n.T('Please')%> <a href="mailto:xuyi_wang@hotmail.com"><%=i18n.T('give us feedback')%></a>
+            </p>
           </div>
         </script>
 
         <script type="text/html" id="help-template">
-          <% if (authenticated) { %>
-            <button class="settings btn btn-default"><%=i18n.T('Settings')%></button>
-          <% } %>
-          <div class="intro">
-            <h1><%=i18n.T('Q & A')%></h1>
-          </div>
           <strong><p><%=i18n.T('How can I create an account?')%></p></strong>
-          <p><%=i18n.T('You can create an account by clicking on Register.')%></p>
+          <p><%=i18n.T('You can create an account by login with your e-mail address.')%></p>
           <strong><p><%=i18n.T('How can I add an topic?')%></p></strong>
-          <p><%=i18n.T('You can add an item by clicking on Add An Topic button.')%></p>
-          <strong><p><%=i18n.T('How can I change my personal information?')%></p></strong>
-          <p><%=i18n.T('You can change your information by click on Settings button.')%></p>
+          <p><%=i18n.T('You can add an topic by clicking on Add An Topic button.')%></p>
+          <strong><p><%=i18n.T('How can I change my username?')%></p></strong>
+          <p><%=i18n.T('You can change your username by click on Settings button.')%></p>
           <strong><p><%=i18n.T('How can I react on an topic?')%></p></strong>
-          <p><%=i18n.T('You can react on an topic by clicking on Reply button after clicking on the topic.')%></p>
+          <p><%=i18n.T('You can react on an topic by clicking on Reply button after clicking the topic.')%></p>
+          <% if (authenticated) { %>
+            <button class="settings btn btn-primary"><%=i18n.T('Settings')%></button>
+          <% } %>
         </script>
 
         <script type="text/html" id="settings-template">
             <form action="/api/adduser" method="post">
               <label for="id_username"><%=i18n.T('Username')%>:</label>
               <input class="form-control" id="id_username" type="text" name="username" value="<%=_.escape(user.get('username'))%>" required/>
-              <button type="submit" class="btn btn-dafault"><%=i18n.T('Save')%></button>
-              <button class="cancel btn btn-default"><%=i18n.T('Cancel')%></button>
+              <br>
+              <button type="submit" class="btn btn-success"><%=i18n.T('Save')%></button>
+              <button class="cancel btn btn-danger"><%=i18n.T('Cancel')%></button>
             </form>
         </script>
 
@@ -156,8 +156,9 @@
               <label for="id_description"><%=i18n.T('Description')%>:</label>
               <textarea class="form-control" id="id_description" name="description" cols="50"></textarea>
               <input type="hidden" id="id_owner" name="owner" value="<%=owner.get('id')%>">
-              <button type="submit" class="btn btn-default"><%=i18n.T('Create')%></button>
-              <button class="cancel btn btn-default"><%=i18n.T('Cancel')%></button>
+              <br>
+              <button type="submit" class="btn btn-success"><%=i18n.T('Create')%></button>
+              <button class="cancel btn btn-danger"><%=i18n.T('Cancel')%></button>
             </form>
         </script>
 
@@ -167,8 +168,9 @@
             <textarea class="form-control" id="id_text" name="text" cols="50"></textarea>
             <input type="hidden" name="owner" value="<%=user.get('url')%>">
             <input type="hidden" name="item" value="http://localhost:8000/api/items/<%=item.get('id')%>">
-            <button type="submit" class="btn btn-dafault"><%=i18n.T('Create')%></button>
-            <button class="cancel btn btn-dafault"><%=i18n.T('Cancel')%></button>
+            <br>
+            <button type="submit" class="btn btn-success"><%=i18n.T('Create')%></button>
+            <button class="cancel btn btn-danger"><%=i18n.T('Cancel')%></button>
           </form>
         </script>
 
@@ -183,7 +185,7 @@
               <%=message.get('full_text')%>
             </p>
           <% }); %>
-          <button class="add btn btn-dafault"><%=i18n.T('Reply')%></button>
+          <button class="add btn btn-primary"><%=i18n.T('Reply')%></button>
         </script>
 
         <script type="text/html" id="edit-template">

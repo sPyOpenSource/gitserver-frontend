@@ -13,23 +13,6 @@
         }
     });
 
-    var ServerFormView = TemplateView.extend({
-      events: {
-        'click button.cancel': 'done'
-      },
-      done: function (event) {
-          if (event) {
-              event.preventDefault();
-          }
-          this.trigger('done');
-          this.remove();
-      },
-      success: function (model) {
-          this.done();
-          window.location.hash = '#';
-      }
-    })
-
     var FormView = TemplateView.extend({
         events: {
             'submit form': 'submit',
@@ -62,6 +45,10 @@
             event.preventDefault();
             this.form = $(event.currentTarget);
             this.clearErrors();
+        },
+        success: function (model) {
+            this.done();
+            window.location = '/git/index.html';
         },
         failure: function (xhr, status, error) {
             var errors = xhr.responseJSON;
@@ -107,14 +94,10 @@
               item: app.session.get('item'),
               i18n: app.session.get('i18n')
             };
-        },
-        success: function (model) {
-            this.done();
-            window.location.hash = '#';
         }
     });
 
-    var NewItemView = ServerFormView.extend({
+    var NewItemView = FormView.extend({
         templateName: '#new-item-template',
         className: 'new-item',
         initialize: function (options){
@@ -124,6 +107,14 @@
           this.csrf_token.fetch({
             success: $.proxy(self.render, self)
           });
+        },
+        submit: function (event) {
+            var data = {};
+            FormView.prototype.submit.apply(this, arguments);
+            data = this.serializeForm(this.form);
+            $.post('/api/additem', data)
+                .done($.proxy(this.success, this))
+                .fail($.proxy(this.failure, this));
         },
         getContext: function () {
           return {
@@ -140,13 +131,13 @@
         },
         render: function(){
           var template = _.template(
-            '<script>$("#message").fadeOut(3000);</script><div id="message" class="alert alert-success"><strong>Success!</strong> New user is successfully created.</div>'
+            '<script>$("#message").fadeOut(3000);</script><div id="message" class="alert alert-success"><strong>Success!</strong></div>'
           );
           this.$el.html(template);
         }
     });
 
-    var ResetPasswordView = ServerFormView.extend({
+    var ResetPasswordView = FormView.extend({
         templateName: '#password-template',
         className: 'reset-password',
         initialize: function (options){
@@ -160,6 +151,14 @@
             success: $.proxy(self.render, self)
           });
           this.key = options.key;
+        },
+        submit: function (event) {
+            var data = {};
+            FormView.prototype.submit.apply(this, arguments);
+            data = this.serializeForm(this.form);
+            $.post('/api/resetpassword', data)
+                .done($.proxy(this.success, this))
+                .fail($.proxy(this.failure, this));
         },
         getContext: function () {
             return {
@@ -189,10 +188,6 @@
         },
         getContext: function () {
             return {user: app.session.get('user'), i18n: app.session.get('i18n')};
-        },
-        success: function (model) {
-            this.done();
-            window.location.hash = '#';
         }
     });
 
@@ -284,9 +279,6 @@
               .done($.proxy(this.success, this))
               .fail($.proxy(this.failure, this));
         },
-        success: function (data) {
-            window.location = '/static/index.html#/success';
-        },
         getContext: function (data) {
             return {i18n: app.session.get('i18n')};
         }
@@ -346,7 +338,6 @@
             attributes = this.serializeForm(this.form);
             this.item.set(attributes);
             this.item.save();
-            window.location = '/';
         },
         getContext: function () {
             return {item: this.item};

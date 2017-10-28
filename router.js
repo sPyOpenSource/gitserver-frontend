@@ -57,8 +57,6 @@
         success: function(){
             var view = new app.views.SecondView({el: this.message});
             this.render(view);
-            var view = new app.views.HomepageView({el: this.contentElement});
-            this.render(view);
         },
         route: function (route, name, callback) {
             // Override default route to enforce login on every page

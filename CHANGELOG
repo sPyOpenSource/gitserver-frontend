@@ -1,3 +1,6 @@
+v1.11 XW 28-10-2017
+changed: design (issue #13)
+
 v1.10 XW 22-10-2017
 changed: items ordered by title
 fixed: after login redirect to /git/index.html
