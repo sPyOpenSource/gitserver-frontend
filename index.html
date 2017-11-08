@@ -6,30 +6,31 @@
         <title>Git Server</title>
         <meta name="description" content="This is a Git Repositories Server.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
         <script src="vendor/jquery.js"></script>
-        <script src="bootstrap.js"></script>
         <script type="text/html" id="about-template">
             <p>
               Dear visitors,
             </p>
             <p>
               Git Server is a place for programmers.
-              <%=i18n.T('It is a website created and used by the programmers.')%>
-              <%=i18n.T('This site is created to match the wishes of programmers.')%>
-              <%=i18n.T('Take a look on Git Server and meet programmers over there!')%>
-              <%=i18n.T('Git Server is a non-profit website.')%>
+              It is a website created and used by the programmers.
+              This site is created to match the wishes of programmers.
+              Take a look on Git Server and meet programmers over there!
+              Git Server is a non-profit website.
             </p>
             <p>
-              <%=i18n.T('Kind regards,')%><br>Xuyi
+              Kind regards,
+              <br>
+              Xuyi
             </p>
         </script>
 
         <script type="text/html" id="home-template">
           <p>
-            <%=i18n.T('You can use this website to get in touch with other programmers.')%>
+            You can use this website to get in touch with other programmers.
           </p>
-          <button class="add btn btn-primary"><%=i18n.T('Add An Topic')%></button>
+          <button class="add btn btn-primary">Add An Topic</button>
           <% if (items !== null) { %>
             <div class="items">
               <% _.each(items.models, function (item) { %>
@@ -44,133 +45,50 @@
           <% } %>
         </script>
 
-        <script type="text/html" id="login-template">
-            <form action="" method="post">
-              <label for="id_email"><%=i18n.T('E-mail')%>:</label>
-              <input class="form-control" id="id_email" type="text" name="email" pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" required />
-              <label for="id_password"><%=i18n.T('Password')%>:</label>
-              <input class="form-control" id="id_password" type="password" name="password" required />
-              <br>
-              <button type="submit" class="btn btn-primary"><%=i18n.T('Submit')%></button>
-              <a href="#/password/reset"><%=i18n.T('I lost my password')%></a>
-            </form>
-        </script>
-
-        <script type="text/html" id="password-template">
-            <form action="/api/resetpassword" method="post">
-              <input name="csrfmiddlewaretoken" value="<%=csrf_token.get('csrf_token')%>" type="hidden">
-              <% if (key === "reset") { %>
-                <p>
-                  <%=i18n.T('So you forgot your password?')%>
-                  <%=i18n.T('Fill in your email address below:')%>
-                </p>
-                <input class="form-control" id="id_email" type="text" name="email" pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" required />
-              <% } else { %>
-                <input type="hidden" name="key" value="<%=key%>">
-                <p>
-                  <%=i18n.T('So you want to change your password?')%>
-                  <%=i18n.T('Enter your new password here')%>:
-                </p>
-                <input class="form-control" id="id_password" type="password" name="password" required maxlength="50"/>
-              <% } %>
-              <br>
-              <button type="submit" class="btn btn-primary"><%=i18n.T('Submit')%></button>
-            </form>
-        </script>
-
         <script type="text/html" id="header-template">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="navbar-brand" href="#">Git Server</a>
-            </div>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-              <ul class="nav navbar-nav">
-                <li><a href="#/help"><%=i18n.T('Help')%></a></li>
-                <% if (authenticated) { %>
-                  <!--li><a href="#">Milestones</a></li-->
-                  <li><a href="#" class="logout"><%=i18n.T('Logout')%></a></li>
-                <% } else { %>
-                  <li><a href="#"><%=i18n.T('Login')%></a></li>
-                <% } %>
-              </ul>
-            </div>
-          </div>
+            <ul class="nav nav-tabs">
+                <li role="presentation"><a href="#">Home</a></li>
+                <li role="presentation"><a href="#/help">Help</a></li>
+                <!--li><a href="#">Milestones</a></li-->
+            </ul>
+            <br>
         </script>
 
         <script type="text/html" id="footer-template">
           <hr>
-          <div class="container">
-            <p>
-              <%=i18n.T('What is Git Server and how does it work?')%> <a href="#/about"><%=i18n.T('About us')%></a><br/>
-              <%=i18n.T('Tips, suggestions, complaints or questions?')%> <%=i18n.T('Please')%> <a href="mailto:xuyi_wang@hotmail.com"><%=i18n.T('give us feedback')%></a>
-            </p>
-          </div>
+          <p>
+            What is Git Server and how does it work? <a href="#/about">About us</a><br/>
+            Tips, suggestions, complaints or questions? Please <a href="mailto:xuyi_wang@hotmail.com">give us feedback</a>
+          </p>
         </script>
 
         <script type="text/html" id="help-template">
-          <strong><p><%=i18n.T('How can I create an account?')%></p></strong>
-          <p><%=i18n.T('You can create an account by login with your e-mail address.')%></p>
-          <strong><p><%=i18n.T('How can I add an topic?')%></p></strong>
-          <p><%=i18n.T('You can add an topic by clicking on Add An Topic button.')%></p>
-          <strong><p><%=i18n.T('How can I change my username?')%></p></strong>
-          <p><%=i18n.T('You can change your username by click on Settings button.')%></p>
-          <strong><p><%=i18n.T('How can I react on an topic?')%></p></strong>
-          <p><%=i18n.T('You can react on an topic by clicking on Reply button after clicking the topic.')%></p>
-          <% if (authenticated) { %>
-            <button class="settings btn btn-primary"><%=i18n.T('Settings')%></button>
-          <% } %>
-        </script>
-
-        <script type="text/html" id="settings-template">
-            <form action="/api/adduser" method="post">
-              <label for="id_username"><%=i18n.T('Username')%>:</label>
-              <input class="form-control" id="id_username" type="text" name="username" value="<%=_.escape(user.get('username'))%>" required/>
-              <br>
-              <button type="submit" class="btn btn-success"><%=i18n.T('Save')%></button>
-              <button class="cancel btn btn-danger"><%=i18n.T('Cancel')%></button>
-            </form>
-        </script>
-
-        <script type="text/html" id="new-user-template">
-            <form action="/api/adduser" method="post">
-              <input name="csrfmiddlewaretoken" value="<%=csrf_token.get('csrf_token')%>" type="hidden">
-              <label for="id_email"><%=i18n.T('E-mail')%>:</label>
-              <input class="form-control" id="id_email" type="text" name="email" required pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"/>
-              <label for="id_username"><%=i18n.T('Username')%>:</label>
-              <input class="form-control" id="id_username" type="text" name="username" required/>
-              <button type="submit" class="btn btn-dafault"><%=i18n.T('Save')%></button>
-            </form>
+          <strong><p>How can I add an topic?</p></strong>
+          <p>You can add an topic by clicking on Add An Topic button.</p>
+          <strong><p>How can I react on an topic?</p></strong>
+          <p>You can react on an topic by clicking on Reply button after clicking the topic.</p>
         </script>
 
         <script type="text/html" id="new-item-template">
-            <form action="/api/additem" method="post" enctype="multipart/form-data">
-              <label for="id_title"><%=i18n.T('Title')%>:</label>
-              <input name="csrfmiddlewaretoken" value="<%=csrf_token.get('csrf_token')%>" type="hidden">
-              <input class="form-control" id="id_title" type="text" name="title" maxlength="100" required />
-              <label for="id_description"><%=i18n.T('Description')%>:</label>
-              <textarea class="form-control" id="id_description" name="description" cols="50"></textarea>
-              <input type="hidden" id="id_owner" name="owner" value="<%=owner.get('id')%>">
-              <br>
-              <button type="submit" class="btn btn-success"><%=i18n.T('Create')%></button>
-              <button class="cancel btn btn-danger"><%=i18n.T('Cancel')%></button>
-            </form>
+          <form action="" method="post">
+            <label for="id_title">Title:</label>
+            <input class="form-control" id="id_title" type="text" name="title" maxlength="100" required />
+            <label for="id_description">Description:</label>
+            <textarea class="form-control" id="id_description" name="description" cols="50"></textarea>
+            <br>
+            <button type="submit" class="btn btn-success">Create</button>
+            <button class="cancel btn btn-danger">Cancel</button>
+          </form>
         </script>
 
         <script type="text/html" id="new-message-template">
           <form action="" method="post">
-            <label for="id_text"><%=i18n.T('Message')%>:</label>
+            <label for="id_text">Message:</label>
             <textarea class="form-control" id="id_text" name="text" cols="50"></textarea>
-            <input type="hidden" name="owner" value="<%=user.get('url')%>">
             <input type="hidden" name="item" value="http://localhost:8000/api/items/<%=item.get('id')%>">
             <br>
-            <button type="submit" class="btn btn-success"><%=i18n.T('Create')%></button>
-            <button class="cancel btn btn-danger"><%=i18n.T('Cancel')%></button>
+            <button type="submit" class="btn btn-success">Create</button>
+            <button class="cancel btn btn-danger">Cancel</button>
           </form>
         </script>
 
@@ -182,29 +100,13 @@
           </p>
           <% _.each(messages.models, function (message) { %>
             <p>
-              <%=message.get('full_text')%>
+              <%=message.getDatetime() + ': ' + _.escape(message.get('text'))%>
             </p>
           <% }); %>
-          <button class="add btn btn-primary"><%=i18n.T('Reply')%></button>
-        </script>
-
-        <script type="text/html" id="edit-template">
-          <form action="" method="post">
-            <button type="submit">Save</button>
-            <button type="delete">Delete</button>
-            <br/>
-            <input type="hidden" name="id" value="<%=item.get('id')%>">
-            <label for="id_title">Title:</label>
-            <input id="id_title" type="text" name="title" maxlength="100" required value="<%=item.get('title')%>" />
-            <label for="id_description">Description:</label>
-            <textarea id="id_description" name="description" cols="50"><%=item.get('description')%></textarea>
-            <label for="id_image">Picture:</label>
-            <input type="file" id="id_image" name="image" accept="image/*">
-          </form>
+          <button class="add btn btn-primary">Reply</button>
         </script>
     </head>
     <body>
-      <div class="container" id="message"></div>
       <main id="content" class="container" role="main"></main>
       <script src="vendor/underscore.js"></script>
       <script src="vendor/backbone.js"></script>
@@ -213,8 +115,7 @@
           "models": {},
           "collections": {},
           "views": {},
-          "router": null,
-          "apiLogin": "/api/token-auth"
+          "router": null
         }
       </script>
       <script src="app.js"></script>

@@ -3,10 +3,8 @@
         routes: {
             '': 'home',
             'item/:id': 'item',
-            'edit/:id': 'edit',
             'help': 'help',
             'about': 'about',
-            'password/:key': 'password',
             'success': 'success'
         },
         initialize: function (options) {
@@ -32,20 +30,6 @@
             });
             this.render(view);
         },
-        edit: function (id) {
-            var view = new app.views.EditView({
-                el: this.contentElement,
-                itemId: id
-            });
-            this.render(view);
-        },
-        password: function(key){
-            var view = new app.views.PasswordView({
-                el: this.contentElement,
-                key: key
-            });
-            this.render(view);
-        },
         help: function(){
             var view = new app.views.HelpView({el: this.contentElement});
             this.render(view);
@@ -63,14 +47,7 @@
             callback = callback || this[name];
             callback = _.wrap(callback, function (original) {
                 var args = _.without(arguments, original);
-                if (app.session.authenticated() || -1 !== $.inArray(name, ['about', 'help', 'password', 'success'])) {
-                    original.apply(this, args);
-                } else {
-                    // Show the login screen before calling the view
-                    // Bind original callback once the login is successful
-                    var view = new app.views.LoginView({el: this.contentElement});
-                    this.render(view);
-                }
+                original.apply(this, args);
             });
             return Backbone.Router.prototype.route.apply(this, [route, name, callback]);
         },
