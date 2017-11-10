@@ -7,11 +7,8 @@
         <meta name="description" content="This is a Git Repositories Server.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="css/bootstrap.min.css">
-        <script src="vendor/jquery.js"></script>
         <script type="text/html" id="about-template">
-            <p>
-              Dear visitors,
-            </p>
+            <h3>Our vision</h3>
             <p>
               Git Server is a place for programmers.
               It is a website created and used by the programmers.
@@ -27,9 +24,9 @@
         </script>
 
         <script type="text/html" id="home-template">
-          <p>
+          <h3>
             You can use this website to get in touch with other programmers.
-          </p>
+          </h3>
           <button class="add btn btn-primary">Add An Topic</button>
           <% if (items !== null) { %>
             <div class="items">
@@ -46,12 +43,11 @@
         </script>
 
         <script type="text/html" id="header-template">
-            <ul class="nav nav-tabs">
+            <ul class="nav nav-tabs" style="font-size:1.5em">
                 <li role="presentation"><a href="#">Home</a></li>
                 <li role="presentation"><a href="#/help">Help</a></li>
                 <!--li><a href="#">Milestones</a></li-->
             </ul>
-            <br>
         </script>
 
         <script type="text/html" id="footer-template">
@@ -63,6 +59,7 @@
         </script>
 
         <script type="text/html" id="help-template">
+          <h3>Q & A</h3>
           <strong><p>How can I add an topic?</p></strong>
           <p>You can add an topic by clicking on Add An Topic button.</p>
           <strong><p>How can I react on an topic?</p></strong>
@@ -93,14 +90,14 @@
         </script>
 
         <script type="text/html" id="item-template">
-          <h1 dir="ltr"><%=item.get('title')%></h1>
+          <h3 dir="ltr"><%=item.get('title')%></h3>
           <input type="hidden" name="id" value="<%=item.get('id')%>">
           <p class="desc" dir="ltr">
             <%=_.escape(item.get('description'))%>
           </p>
           <% _.each(messages.models, function (message) { %>
             <p>
-              <%=message.getDatetime() + ': ' + _.escape(message.get('text'))%>
+              <%=message.getDatetime()%>: <%=_.escape(message.get('text'))%>
             </p>
           <% }); %>
           <button class="add btn btn-primary">Reply</button>
@@ -108,6 +105,7 @@
     </head>
     <body>
       <main id="content" class="container" role="main"></main>
+      <script src="vendor/jquery.js"></script>
       <script src="vendor/underscore.js"></script>
       <script src="vendor/backbone.js"></script>
       <script id="config" type="text/json">

@@ -48,7 +48,6 @@
         },
         success: function (model) {
             this.done();
-            window.location = '/git/index.html';
         },
         failure: function (xhr, status, error) {
             var errors = xhr.responseJSON;
@@ -59,11 +58,6 @@
                 event.preventDefault();
             }
             this.trigger('done');
-            this.remove();
-        },
-        modelFailure: function (model, xhr, options) {
-            var errors = xhr.responseJSON;
-            this.showErrors(errors);
         }
     });
 
@@ -71,14 +65,13 @@
         templateName: '#new-message-template',
         className: 'new-message',
         submit: function (event) {
-            var self = this,
-                attributes = {};
+            var self = this;
             FormView.prototype.submit.apply(this, arguments);
-            attributes = this.serializeForm(this.form);
+            var attributes = this.serializeForm(this.form);
             app.messages.create(attributes, {
               wait: true,
               success: $.proxy(self.success, self),
-              error: $.proxy(self.modelFailure, self)
+              error: $.proxy(self.failure, self)
             });
         },
         getContext: function () {
@@ -92,12 +85,13 @@
         templateName: '#new-item-template',
         className: 'new-item',
         submit: function (event) {
+            var self = this;
             FormView.prototype.submit.apply(this, arguments);
             var data = this.serializeForm(this.form);
             app.items.create(data, {
               wait: true,
               success: $.proxy(self.success, self),
-              error: $.proxy(self.modelFailure, self)
+              error: $.proxy(self.failure, self)
             });
         }
     });
@@ -125,13 +119,14 @@
         },
         renderAddForm: function (event) {
             var view = new NewItemView(),
-                link = $(event.currentTarget);
+                link = $(event.currentTarget),
+                self = this;
             event.preventDefault();
             link.before(view.el);
             link.hide();
             view.render();
             view.on('done', function () {
-                link.show();
+                self.render();
             });
         }
     });
@@ -176,13 +171,14 @@
         },
         renderAddForm: function (event) {
             var view = new NewMessageView(),
-                link = $(event.currentTarget);
+                link = $(event.currentTarget),
+                self = this;
             event.preventDefault();
             link.before(view.el);
             link.hide();
             view.render();
             view.on('done', function () {
-                link.show();
+                self.render();
             });
         }
     });
