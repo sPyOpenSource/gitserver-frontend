@@ -18,22 +18,9 @@
             'submit form': 'submit',
             'click button.cancel': 'done'
         },
-        errorTemplate: _.template('<span class="error"><%- msg %></span>'),
+        errorTemplate: _.template('<span class="error"><%- msg %><br></span>'),
         clearErrors: function () {
             $('.error', this.form).remove();
-        },
-        showErrors: function (errors) {
-            _.map(errors, function (fieldErrors, name) {
-                var field = $(':input[name=' + name + ']', this.form),
-                    label = $('label[for=' + field.attr('id') + ']', this.form);
-                if (label.length === 0) {
-                    label = $('label', this.form).first();
-                }
-                function appendError(msg) {
-                    label.before(this.errorTemplate({msg: msg}));
-                }
-                _.map(fieldErrors, appendError, this);
-            }, this);
         },
         serializeForm: function (form) {
             return _.object(_.map(form.serializeArray(), function (item) {
@@ -49,9 +36,10 @@
         success: function (model) {
             this.done();
         },
-        failure: function (xhr, status, error) {
-            var errors = xhr.responseJSON;
-            this.showErrors(errors);
+        failure: function (model, status, error) {
+            if (status.status===502){
+                this.form.prepend(this.errorTemplate({msg: "Bad gateway."}))
+            }
         },
         done: function (event) {
             if (event) {
