@@ -4,8 +4,7 @@
             '': 'home',
             'item/:id': 'item',
             'help': 'help',
-            'about': 'about',
-            'success': 'success'
+            'about': 'about'
         },
         initialize: function (options) {
             this.contentElement = '#content';
@@ -36,10 +35,6 @@
         },
         about: function(){
             var view = new app.views.AboutView({el: this.contentElement});
-            this.render(view);
-        },
-        success: function(){
-            var view = new app.views.SecondView({el: this.message});
             this.render(view);
         },
         route: function (route, name, callback) {
